@@ -32,7 +32,7 @@ deezer.redirect_uri=https://your.domain.com
 #To get deezer.secret see https://developers.deezer.com/myapps
 deezer.secret=deezer_app_secret_key
 ```
-6. Login to Deezer. You must follow the link which will be printed to console and accept app permissions.
+6. Login to Deezer. You must follow the link which will be printed to console and accept app permissions.<br/>
    `java -jar TelegramDeezerClient-1.0-SNAPSHOT-jar-with-dependencies.jar deezer.login`
 7. Login to your custom Telegram client. You will be prompted to enter authentication code.<br/>
    `java -jar TelegramDeezerClient-1.0-SNAPSHOT-jar-with-dependencies.jar telegram.login`
