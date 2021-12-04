@@ -62,9 +62,7 @@ public class OutlinedImageTrack implements ImageTrack {
      * @param offsetY    Y offset.
      */
     protected void print(Graphics2D graphics, String text, int imageWidth, int offsetY) {
-        graphics.setFont(BASE_FONT.deriveFont(getFontSize(text)));
-
-        Shape outline = graphics.getFont().createGlyphVector(graphics.getFontRenderContext(), text).getOutline();
+        Shape outline = getOutline(graphics, text, imageWidth);
 
         graphics.translate(-offsetX, 0);
         offsetX = (imageWidth - outline.getBounds().width) / 2;
@@ -78,14 +76,23 @@ public class OutlinedImageTrack implements ImageTrack {
     }
 
     /**
-     * Calculates font size based on text length.
+     * Creates an outline to put text on the picture.
      *
-     * @param text text to print.
-     * @return font size.
+     * @param graphics   picture graphics.
+     * @param text       text to put.
+     * @param imageWidth image width.
+     * @return text outline.
      */
-    protected float getFontSize(String text) {
-        return text.length() < 15
-                ? FONT_SIZE
-                : FONT_SIZE / (text.length() / 12f);
+    protected Shape getOutline(Graphics2D graphics, String text, int imageWidth) {
+        Shape outline;
+        float i = 0;
+
+        do {
+            graphics.setFont(BASE_FONT.deriveFont(FONT_SIZE - i));
+            outline = graphics.getFont().createGlyphVector(graphics.getFontRenderContext(), text).getOutline();
+            i += 10;
+        } while (outline.getBounds().width > imageWidth * 0.8);
+
+        return outline;
     }
 }

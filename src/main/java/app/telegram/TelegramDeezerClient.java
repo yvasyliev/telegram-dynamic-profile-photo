@@ -111,9 +111,6 @@ public class TelegramDeezerClient {
             AccessToken accessToken = deezerApi.auth().getAccessToken(appId, secret, urlParams.get("code")).execute();
             deezerApi.setAccessToken(accessToken);
             APP_PROPERTIES.setProperty("deezer.access_token", accessToken.getAccessToken());
-
-            User me = deezerApi.user().getMe().execute();
-            APP_PROPERTIES.setProperty("deezer.me", String.valueOf(me.getId()));
         } catch (IOException | DeezerException e) {
             throw new DeezerLoginException(e);
         }
@@ -170,7 +167,7 @@ public class TelegramDeezerClient {
 
             DeezerApi deezerApi = new DeezerApi(accessToken);
 
-            Track lastTrack = deezerApi.user().getMyHistory().limit(1).execute().getData().get(0);
+            Track lastTrack = deezerApi.user().getMyHistory().execute().getData().get(0);
 
             if (lastTrackId == null || !lastTrackId.equals(String.valueOf(lastTrack.getId()))) {
                 BufferedImage cover = ImageIO.read(new URL(lastTrack.getAlbum().getCoverXl()));

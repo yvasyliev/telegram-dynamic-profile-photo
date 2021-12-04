@@ -33,10 +33,10 @@ deezer.redirect_uri=https://your.domain.com
 deezer.secret=deezer_app_secret_key
 ```
 6. Login to Deezer. You must follow the link which will be printed to console and accept app permissions.<br/>
-   `java -jar TelegramDeezerClient-1.0-SNAPSHOT-jar-with-dependencies.jar deezer.login`
+   `java -jar TelegramDeezerClient-1.0.1-jar-with-dependencies.jar deezer.login`
 7. Login to your custom Telegram client. You will be prompted to enter authentication code.<br/>
-   `java -jar TelegramDeezerClient-1.0-SNAPSHOT-jar-with-dependencies.jar telegram.login`
+   `java -jar TelegramDeezerClient-1.0.1-jar-with-dependencies.jar telegram.login`
 8. Update your profile photo.<br/>
-   `java -jar TelegramDeezerClient-1.0-SNAPSHOT-jar-with-dependencies.jar telegram.change_photo`
+   `java -jar TelegramDeezerClient-1.0.1-jar-with-dependencies.jar telegram.change_photo`
 9. (Optional) Logout from the client.<br/>
-   `java -jar TelegramDeezerClient-1.0-SNAPSHOT-jar-with-dependencies.jar telegram.logout`
+   `java -jar TelegramDeezerClient-1.0.1-jar-with-dependencies.jar telegram.logout`
