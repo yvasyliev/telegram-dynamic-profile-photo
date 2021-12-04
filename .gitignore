@@ -21,3 +21,31 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Intellij Idea files
+.idea
+
+# Project files
+target
+app.properties
+logback.xml
+
+# Telegram files
+.cache
+animations
+documents
+music
+passport
+photos
+profile_photos
+secret
+secret_thumbnails
+stickers
+temp
+thumbnails
+video_notes
+videos
+voice
+wallpapers
+*.jpg
+*.binlog
