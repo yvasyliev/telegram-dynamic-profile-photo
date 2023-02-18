@@ -77,7 +77,6 @@
         <dependency>
             <groupId>it.tdlight</groupId>
             <artifactId>tdlight-natives-linux-amd64</artifactId>
-            <version>4.0.186</version>
         </dependency>
         <dependency>
             <groupId>it.tdlight</groupId>
