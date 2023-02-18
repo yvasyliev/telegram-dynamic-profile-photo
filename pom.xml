@@ -69,7 +69,7 @@
         <dependency>
             <groupId>it.tdlight</groupId>
             <artifactId>tdlight-natives-windows-amd64</artifactId>
-            <version>4.0.186</version>
+            <version>4.0.299</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
