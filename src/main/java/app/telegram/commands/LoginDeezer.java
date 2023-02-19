@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Scanner;
+import java.util.Properties;
 
 public class LoginDeezer implements Command {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginDeezer.class);
@@ -31,7 +31,7 @@ public class LoginDeezer implements Command {
     private Permission permission;
 
     @Autowired
-    private Scanner scanner; // TODO: 2/18/2023 remove
+    private Properties appProperties;
 
     @Override
     public void execute() {
@@ -44,8 +44,9 @@ public class LoginDeezer implements Command {
 
             AccessToken accessToken = deezerApi.auth().getAccessToken(appId, secret, code).execute();
             deezerApi.setAccessToken(accessToken);
+            appProperties.setProperty("deezer.access_token", accessToken.getAccessToken());
 
-            System.out.println("Logged in into Deezer.");
+            LOGGER.info("Logged in into Deezer.");
         } catch (DeezerException e) {
             LOGGER.error("Failed to execute LoginDeezer command.", e);
         }

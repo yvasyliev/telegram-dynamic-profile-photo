@@ -2,6 +2,7 @@ package app.telegram.config;
 
 import api.deezer.DeezerApi;
 import api.deezer.objects.Permission;
+import app.telegram.properties.AppProperties;
 import it.tdlight.client.APIToken;
 import it.tdlight.client.AuthenticationData;
 import it.tdlight.client.SimpleTelegramClient;
@@ -9,11 +10,12 @@ import it.tdlight.client.TDLibSettings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-import java.io.InputStream;
-import java.util.Scanner;
+import java.util.Properties;
 
 @Configuration
+@PropertySource("app.properties")
 public class AppConfig {
     @Value("${telegram.api_id}")
     private int appId;
@@ -30,17 +32,6 @@ public class AppConfig {
     public Permission permission() {
         return Permission.LISTENING_HISTORY;
     }
-
-    @Bean
-    public Scanner scanner() {
-        return new Scanner(source());
-    }
-
-    @Bean
-    public InputStream source() {
-        return System.in;
-    }
-
     @Bean
     public SimpleTelegramClient simpleTelegramClient() {
         return new SimpleTelegramClient(tdLibSettings());
@@ -59,5 +50,10 @@ public class AppConfig {
     @Bean
     public AuthenticationData authenticationData() {
         return AuthenticationData.consoleLogin();
+    }
+
+    @Bean
+    public Properties appProperties() {
+        return new AppProperties();
     }
 }
