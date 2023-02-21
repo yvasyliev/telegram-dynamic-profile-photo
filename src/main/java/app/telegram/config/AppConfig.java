@@ -5,6 +5,7 @@ import app.telegram.client.SyncTelegramClient;
 import app.telegram.commands.Command;
 import app.telegram.commands.LoginDeezer;
 import app.telegram.commands.LoginTelegram;
+import app.telegram.commands.LogoutTelegram;
 import app.telegram.factories.TelegramClientFactory;
 import app.telegram.properties.AppProperties;
 import it.tdlight.client.APIToken;
@@ -36,6 +37,7 @@ public class AppConfig {
         Map<String, Command> commandMap = new HashMap<>();
         commandMap.put("deezer.login", loginDeezer());
         commandMap.put("telegram.login", loginTelegram());
+        commandMap.put("telegram.logout", logoutTelegram());
         return commandMap;
     }
 
@@ -80,5 +82,10 @@ public class AppConfig {
                 Integer.parseInt(appProperties.getProperty("telegram.api_id")),
                 appProperties.getProperty("telegram.api_hash")
         );
+    }
+
+    @Bean
+    public LogoutTelegram logoutTelegram() {
+        return new LogoutTelegram();
     }
 }
