@@ -22,18 +22,6 @@ public class AppProperties extends Properties {
     @Value("app.properties")
     private String propertiesPath;
 
-    /**
-     * Default properties path.
-     */
-    private static final String DEFAULT_PATH = "app.properties";
-
-    public AppProperties() {
-        this(DEFAULT_PATH);
-    }
-
-    public AppProperties(String path) {
-    }
-
     @PostConstruct
     public void load() {
         try (InputStream inputStream = Files.newInputStream(Paths.get(propertiesPath))) {

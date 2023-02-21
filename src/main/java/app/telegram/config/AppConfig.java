@@ -1,40 +1,34 @@
 package app.telegram.config;
 
 import api.deezer.DeezerApi;
-import api.deezer.objects.Permission;
+import app.telegram.client.SyncTelegramClient;
+import app.telegram.commands.Command;
+import app.telegram.commands.LoginDeezer;
+import app.telegram.commands.LoginTelegram;
+import app.telegram.factories.TelegramClientFactory;
 import app.telegram.properties.AppProperties;
 import it.tdlight.client.APIToken;
-import it.tdlight.client.AuthenticationData;
-import it.tdlight.client.SimpleTelegramClient;
 import it.tdlight.client.TDLibSettings;
-import org.springframework.beans.factory.annotation.Value;
+import it.tdlight.common.TelegramClient;
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("app.properties")
 public class AppConfig {
-    @Value("${telegram.api_id}")
-    private int appId;
-
-    @Value("${telegram.api_hash}")
-    private String apiHash;
+    @Autowired
+    @Qualifier("appProperties")
+    private Properties appProperties;
 
     @Bean
     public DeezerApi deezerApi() {
         return new DeezerApi();
-    }
-
-    @Bean
-    public Permission permission() {
-        return Permission.LISTENING_HISTORY;
-    }
-    @Bean
-    public SimpleTelegramClient simpleTelegramClient() {
-        return new SimpleTelegramClient(tdLibSettings());
     }
 
     @Bean
@@ -44,16 +38,47 @@ public class AppConfig {
 
     @Bean
     public APIToken apiToken() {
-        return new APIToken(appId, apiHash);
-    }
-
-    @Bean
-    public AuthenticationData authenticationData() {
-        return AuthenticationData.consoleLogin();
+        return new APIToken(
+                Integer.parseInt(appProperties.getProperty("telegram.api_id")),
+                appProperties.getProperty("telegram.api_hash")
+        );
     }
 
     @Bean
     public Properties appProperties() {
         return new AppProperties();
+    }
+
+    @Bean
+    public Map<String, Command> commandMap() {
+        Map<String, Command> commandMap = new HashMap<>();
+        commandMap.put("deezer.login", loginDeezer());
+        commandMap.put("telegram.login", loginTelegram());
+        return commandMap;
+    }
+
+    @Bean
+    public Command loginDeezer() {
+        return new LoginDeezer();
+    }
+
+    @Bean
+    public Command loginTelegram() {
+        return new LoginTelegram();
+    }
+
+    @Bean
+    public FactoryBean<TelegramClient> telegramClientFactory() {
+        return new TelegramClientFactory();
+    }
+
+    @Bean
+    public TelegramClient telegramClient() throws Exception {
+        return telegramClientFactory().getObject();
+    }
+
+    @Bean
+    public SyncTelegramClient syncTelegramClient() {
+        return new SyncTelegramClient();
     }
 }

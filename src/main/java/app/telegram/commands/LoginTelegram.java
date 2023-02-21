@@ -1,35 +1,31 @@
 package app.telegram.commands;
 
-import it.tdlight.client.AuthenticationData;
-import it.tdlight.client.SimpleTelegramClient;
-import it.tdlight.common.Init;
-import it.tdlight.common.utils.CantLoadLibrary;
+import app.telegram.client.SyncTelegramClient;
+import it.tdlight.common.utils.ScannerUtils;
+import it.tdlight.jni.TdApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 public class LoginTelegram implements Command {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginTelegram.class);
 
-    @Value("${telegram.phone_number}")
-    private String phoneNumber;
-
     @Autowired
-    private SimpleTelegramClient telegramClient;
-
-    @Autowired
-    private AuthenticationData authenticationData;
+    private SyncTelegramClient telegramClient;
 
     @Override
     public void execute() {
-        try {
-            Init.start();
-            telegramClient.start(authenticationData);
-        } catch (CantLoadLibrary e) {
-            LOGGER.error("Failed to execute LoginTelegram command.", e);
-        } finally {
-            telegramClient.sendClose();
+        TdApi.AuthorizationState authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
+        if (authorizationState instanceof TdApi.AuthorizationStateReady) {
+            throw new IllegalStateException("The user is already logged in!");
         }
+
+        String phoneNumber = ScannerUtils.askParameter("phone number", "Please enter phone number");
+        telegramClient.send(new TdApi.SetAuthenticationPhoneNumber(phoneNumber, null));
+
+        String code = ScannerUtils.askParameter(phoneNumber, "Please enter code");
+        telegramClient.send(new TdApi.CheckAuthenticationCode(code));
+
+        LOGGER.info("Logged in into Telegram.");
     }
 }

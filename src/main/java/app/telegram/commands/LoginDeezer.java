@@ -8,6 +8,7 @@ import it.tdlight.common.utils.ScannerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Properties;
@@ -18,25 +19,23 @@ public class LoginDeezer implements Command {
     @Autowired
     private DeezerApi deezerApi;
 
-    @Value("${deezer.app_id}")
+    @Autowired
+    @Qualifier("appProperties")
+    private Properties appProperties;
+
+    @Value("#{appProperties.getProperty('deezer.app_id')}")
     private long appId;
 
-    @Value("${deezer.redirect_uri}")
+    @Value("#{appProperties.getProperty('deezer.redirect_uri')}")
     private String redirectUri;
 
-    @Value("${deezer.secret}")
+    @Value("#{appProperties.getProperty('deezer.secret')}")
     private String secret;
-
-    @Autowired
-    private Permission permission;
-
-    @Autowired
-    private Properties appProperties;
 
     @Override
     public void execute() {
         try {
-            String loginUrl = deezerApi.auth().getLoginUrl(appId, redirectUri, permission);
+            String loginUrl = deezerApi.auth().getLoginUrl(appId, redirectUri, Permission.LISTENING_HISTORY);
 
             System.out.println("Please follow the link and login to Deezer:\n" + loginUrl);
 
