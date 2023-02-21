@@ -28,7 +28,7 @@ public class SyncTelegramClient {
     private long timeout;
 
     @PostConstruct
-    public TdApi.Ok setTdlibParameters() {
+    public TdApi.Ok setTdlibParameters() throws ExecutionException, InterruptedException, TimeoutException {
         return send(new TdApi.SetTdlibParameters(
                 tdLibSettings.isUsingTestDatacenter(),
                 tdLibSettings.getDatabaseDirectoryPath().toString(),
@@ -50,19 +50,14 @@ public class SyncTelegramClient {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends TdApi.Object> T send(TdApi.Function<T> request) {
+    public <T extends TdApi.Object> T send(TdApi.Function<T> request) throws ExecutionException, InterruptedException, TimeoutException {
         CompletableFuture<TdApi.Object> response = new CompletableFuture<>();
         telegramClient.send(request, response::complete, response::completeExceptionally);
-        try {
-            return (T) response.get(timeout, TimeUnit.SECONDS);
-        } catch (ExecutionException | InterruptedException | TimeoutException e) {
-            LOGGER.error("Failed to execute {} synchronously.", request, e);
-            throw new RuntimeException(e);
-        }
+        return (T) response.get(timeout, TimeUnit.SECONDS);
     }
 
     @PreDestroy
-    public void close() {
+    public void close() throws ExecutionException, InterruptedException, TimeoutException {
         send(new TdApi.Close());
     }
 }

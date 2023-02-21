@@ -1,7 +1,6 @@
 package app.telegram.commands;
 
 import api.deezer.DeezerApi;
-import api.deezer.exceptions.DeezerException;
 import api.deezer.objects.AccessToken;
 import api.deezer.objects.Permission;
 import it.tdlight.common.utils.ScannerUtils;
@@ -33,21 +32,18 @@ public class LoginDeezer implements Command {
     private String secret;
 
     @Override
-    public void execute() {
-        try {
-            String loginUrl = deezerApi.auth().getLoginUrl(appId, redirectUri, Permission.LISTENING_HISTORY);
+    public void execute() throws Exception {
+        String loginUrl = deezerApi.auth().getLoginUrl(appId, redirectUri, Permission.LISTENING_HISTORY);
 
-            System.out.println("Please follow the link and login to Deezer:\n" + loginUrl);
+        System.out.println("Please follow the link and login to Deezer:\n" + loginUrl);
 
-            String code = ScannerUtils.askParameter("code", "Please enter code");
+        String code = ScannerUtils.askParameter("code", "Please enter code");
 
-            AccessToken accessToken = deezerApi.auth().getAccessToken(appId, secret, code).execute();
-            deezerApi.setAccessToken(accessToken);
-            appProperties.setProperty("deezer.access_token", accessToken.getAccessToken());
+        AccessToken accessToken = deezerApi.auth().getAccessToken(appId, secret, code).execute();
+        deezerApi.setAccessToken(accessToken);
+        appProperties.setProperty("deezer.access_token", accessToken.getAccessToken());
 
-            LOGGER.info("Logged in into Deezer.");
-        } catch (DeezerException e) {
-            LOGGER.error("Failed to execute LoginDeezer command.", e);
-        }
+        LOGGER.info("Logged in into Deezer.");
+
     }
 }

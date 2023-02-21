@@ -14,7 +14,7 @@ public class LoginTelegram implements Command {
     private SyncTelegramClient telegramClient;
 
     @Override
-    public void execute() {
+    public void execute() throws Exception {
         TdApi.AuthorizationState authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
         if (authorizationState instanceof TdApi.AuthorizationStateReady) {
             throw new IllegalStateException("The user is already logged in!");

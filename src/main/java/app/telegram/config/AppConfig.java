@@ -27,24 +27,6 @@ public class AppConfig {
     private Properties appProperties;
 
     @Bean
-    public DeezerApi deezerApi() {
-        return new DeezerApi();
-    }
-
-    @Bean
-    public TDLibSettings tdLibSettings() {
-        return TDLibSettings.create(apiToken());
-    }
-
-    @Bean
-    public APIToken apiToken() {
-        return new APIToken(
-                Integer.parseInt(appProperties.getProperty("telegram.api_id")),
-                appProperties.getProperty("telegram.api_hash")
-        );
-    }
-
-    @Bean
     public Properties appProperties() {
         return new AppProperties();
     }
@@ -63,13 +45,18 @@ public class AppConfig {
     }
 
     @Bean
+    public DeezerApi deezerApi() {
+        return new DeezerApi();
+    }
+
+    @Bean
     public Command loginTelegram() {
         return new LoginTelegram();
     }
 
     @Bean
-    public FactoryBean<TelegramClient> telegramClientFactory() {
-        return new TelegramClientFactory();
+    public SyncTelegramClient syncTelegramClient() {
+        return new SyncTelegramClient();
     }
 
     @Bean
@@ -78,7 +65,20 @@ public class AppConfig {
     }
 
     @Bean
-    public SyncTelegramClient syncTelegramClient() {
-        return new SyncTelegramClient();
+    public FactoryBean<TelegramClient> telegramClientFactory() {
+        return new TelegramClientFactory();
+    }
+
+    @Bean
+    public TDLibSettings tdLibSettings() {
+        return TDLibSettings.create(apiToken());
+    }
+
+    @Bean
+    public APIToken apiToken() {
+        return new APIToken(
+                Integer.parseInt(appProperties.getProperty("telegram.api_id")),
+                appProperties.getProperty("telegram.api_hash")
+        );
     }
 }
