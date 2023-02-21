@@ -72,7 +72,7 @@
         </dependency>
         <dependency>
             <groupId>it.tdlight</groupId>
-            <artifactId>tdlight-java</artifactId>
+            <artifactId>tdlight-java-8</artifactId>
         </dependency>
         <dependency>
             <groupId>it.tdlight</groupId>
