@@ -25,52 +25,53 @@ jobs:
         run: |
           echo "JAR_NAME_TEMPLATE=$JAR_NAME_TEMPLATE"
           echo "JAR_NAME=$JAR_NAME"
+          echo "JAR_PATH=$JAR_PATH"
           echo "TAG="${{ env.TAG }}
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up JDK 8
-        uses: actions/setup-java@v3
-        with:
-          java-version: '8'
-          distribution: 'adopt'
-          cache: maven
-      - name: Build with Maven
-        run: mvn package
-      - name: Upload artifact to remote
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          user: ${{ secrets.REMOTE_USER }}
-          pass: ${{ secrets.REMOTE_PASS }}
-          port: ${{ secrets.REMOTE_PORT }}
-          first_ssh: |
-            cd ${{ secrets.REMOTE_DIR }}
-            > ${{ secrets.RUN_CMD }}
-            rm -rf $JAR_NAME_TEMPLATE
-          scp: |
-            $JAR_PATH => ${{ secrets.REMOTE_DIR }}
-          last_ssh: |
-            cd ${{ secrets.REMOTE_DIR }}
-            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar $JAR_NAME telegram.update_photo" >> ${{ secrets.RUN_CMD }}
-      - name: Create Tag
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag: ${{ env.TAG }}
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG }}
-          release_name: ${{ env.TAG }}
-          draft: true
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: $JAR_PATH
-          asset_name: $JAR_NAME
-          asset_content_type: application/java-archive
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Set up JDK 8
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: '8'
+#          distribution: 'adopt'
+#          cache: maven
+#      - name: Build with Maven
+#        run: mvn package
+#      - name: Upload artifact to remote
+#        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+#        with:
+#          host: ${{ secrets.REMOTE_HOST }}
+#          user: ${{ secrets.REMOTE_USER }}
+#          pass: ${{ secrets.REMOTE_PASS }}
+#          port: ${{ secrets.REMOTE_PORT }}
+#          first_ssh: |
+#            cd ${{ secrets.REMOTE_DIR }}
+#            > ${{ secrets.RUN_CMD }}
+#            rm -rf $JAR_NAME_TEMPLATE
+#          scp: |
+#            $JAR_PATH => ${{ secrets.REMOTE_DIR }}
+#          last_ssh: |
+#            cd ${{ secrets.REMOTE_DIR }}
+#            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar $JAR_NAME telegram.update_photo" >> ${{ secrets.RUN_CMD }}
+#      - name: Create Tag
+#        uses: rickstaa/action-create-tag@v1
+#        with:
+#          tag: ${{ env.TAG }}
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ env.TAG }}
+#          release_name: ${{ env.TAG }}
+#          draft: true
+#      - name: Upload Release Asset
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ steps.create_release.outputs.upload_url }}
+#          asset_path: $JAR_PATH
+#          asset_name: $JAR_NAME
+#          asset_content_type: application/java-archive
