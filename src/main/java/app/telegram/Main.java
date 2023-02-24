@@ -18,22 +18,22 @@ public class Main {
             return;
         }
 
-        AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        context.registerShutdownHook();
+        try {
+            AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+            context.registerShutdownHook();
 
-        Map<?, ?> commandMap = context.getBean("commandMap", Map.class);
-        Command command = (Command) commandMap.get(args[0]);
+            Map<?, ?> commandMap = context.getBean("commandMap", Map.class);
+            Command command = (Command) commandMap.get(args[0]);
 
-        if (command != null) {
-            try {
+            if (command != null) {
                 command.execute();
-            } catch (Exception e) {
-                LOGGER.error("Failed to execute command: {}", args[0], e);
-            } finally {
-                System.exit(1); // W/A to stop tdlib processes.
+            } else {
+                LOGGER.warn("Unknown command: {}", args[0]);
             }
-        } else {
-            LOGGER.warn("Unknown command: {}", args[0]);
+        } catch (Exception e) {
+            LOGGER.error("Failed to execute command: {}", args[0], e);
+        } finally {
+            System.exit(1); // W/A to stop tdlib processes.
         }
     }
 }
