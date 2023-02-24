@@ -10,6 +10,11 @@ on:
 env:
   JAR_NAME_TEMPLATE: telegram-dynamic-profile-photo-*-jar-with-dependencies.jar
   TAG: v${{ github.event.inputs.version }}
+  REMOTE_DIR: /telegram-dynamic-profile-photo
+  DEEZER_LOGIN_CMD: deezer_login.sh
+  TELEGRAM_LOGIN_CMD: telegram_login.sh
+  TELEGRAM_LOGOUT_CMD: telegram_logout.sh
+  TELEGRAM_UPDATE_PHOTO_CMD: telegram_update_photo.sh
 
 jobs:
   release:
@@ -45,14 +50,20 @@ jobs:
           pass: ${{ secrets.REMOTE_PASS }}
           port: ${{ secrets.REMOTE_PORT }}
           first_ssh: |
-            cd ${{ secrets.REMOTE_DIR }}
-            > ${{ secrets.RUN_CMD }}
+            cd ${{ env.REMOTE_DIR }}
+            > ${{ env.DEEZER_LOGIN_CMD }}
+            > ${{ env.TELEGRAM_LOGIN_CMD }}
+            > ${{ env.TELEGRAM_LOGOUT_CMD }}
+            > ${{ env.TELEGRAM_UPDATE_PHOTO_CMD }}
             rm -rf ${{ env.JAR_NAME_TEMPLATE }}
           scp: |
-            ${{ env.JAR_PATH }} => ${{ secrets.REMOTE_DIR }}
+            ${{ env.JAR_PATH }} => ${{ env.REMOTE_DIR }}
           last_ssh: |
-            cd ${{ secrets.REMOTE_DIR }}
-            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar ${{ env.JAR_NAME }} telegram.update_photo" >> ${{ secrets.RUN_CMD }}
+            cd ${{ env.REMOTE_DIR }}
+            echo "java -jar ${{ env.JAR_NAME }} deezer.login" >> ${{ env.DEEZER_LOGIN_CMD }}
+            echo "java -jar ${{ env.JAR_NAME }} telegram.login" >> ${{ env.TELEGRAM_LOGIN_CMD }}
+            echo "java -jar ${{ env.JAR_NAME }} telegram.logout" >> ${{ env.TELEGRAM_LOGOUT_CMD }}
+            echo -e "cd ${{ env.REMOTE_DIR }}\njava -jar ${{ env.JAR_NAME }} telegram.update_photo" >> ${{ env.TELEGRAM_UPDATE_PHOTO_CMD }}
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
