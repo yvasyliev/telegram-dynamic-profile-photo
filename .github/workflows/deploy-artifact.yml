@@ -1,0 +1,29 @@
+name: Deploy artifact
+on:
+  release:
+    types: [published]
+jobs:
+  deploy:
+    run-on: ubuntu-latest
+    steps:
+      - uses: robinraju/release-downloader@v1.7
+        with:
+          repository: "yvasyliev/telegram-dynamic-profile-photo"
+          latest: true
+          fileName: "*-jar-with-dependencies.jar"
+      - name: ssh scp ssh pipelines
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          user: ${{ secrets.REMOTE_USER }}
+          pass: ${{ secrets.REMOTE_PASS }}
+          port: ${{ secrets.REMOTE_PORT }}
+          first_ssh: |
+            cd ${{ secrets.REMOTE_DIR }}
+            > ${{ secrets.RUN_CMD }}
+            rm -rf *.jar ${{ secrets.RUN_CMD }}
+          scp: |
+            *-jar-with-dependencies.jar => ${{ secrets.REMOTE_DIR }
+          last_ssh: |
+            cd ${{ secrets.REMOTE_DIR }}
+            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar "$(ls -d *.jar)" telegram.change_photo" >> ${{ secrets.RUN_CMD }}
