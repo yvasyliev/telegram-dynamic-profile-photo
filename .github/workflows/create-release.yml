@@ -26,7 +26,7 @@ jobs:
         id: get_latest_tag
         uses: actions-ecosystem/action-get-latest-tag@v1
         with:
-          initial_version: true
+          with_initial_version: true
       - name: Print tags
         run: |
           echo "Existing tag: ${{ steps.last_tag.outputs.tag }}"
