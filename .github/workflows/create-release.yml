@@ -2,6 +2,8 @@ name: Create Release
 
 on:
   workflow_dispatch:
+    branches:
+      - main
     inputs:
       version:
         description: "Release version"
@@ -23,10 +25,10 @@ jobs:
           echo "JAR_PATH=target/${{ env.JAR_NAME }}" >> $GITHUB_ENV
       - name: Show env variables
         run: |
-          echo "JAR_NAME_TEMPLATE=$JAR_NAME_TEMPLATE"
-          echo "JAR_NAME=$JAR_NAME"
-          echo "JAR_PATH=$JAR_PATH"
-          echo "TAG=$TAG"
+          echo "JAR_NAME_TEMPLATE=${{ env.JAR_NAME_TEMPLATE }}"
+          echo "JAR_NAME=${{ env.JAR_NAME }}"
+          echo "JAR_PATH=${{ env.JAR_PATH }}"
+          echo "TAG=${{ env.TAG }}"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up JDK 8
@@ -47,12 +49,12 @@ jobs:
           first_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
             > ${{ secrets.RUN_CMD }}
-            rm -rf $JAR_NAME_TEMPLATE
+            rm -rf ${{ env.JAR_NAME_TEMPLATE }}
           scp: |
-            $JAR_PATH => ${{ secrets.REMOTE_DIR }}
+            ${{ env.JAR_PATH }} => ${{ secrets.REMOTE_DIR }}
           last_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
-            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar $JAR_NAME telegram.update_photo" >> ${{ secrets.RUN_CMD }}
+            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar ${{ env.JAR_NAME }} telegram.update_photo" >> ${{ secrets.RUN_CMD }}
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
