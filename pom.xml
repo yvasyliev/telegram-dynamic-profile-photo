@@ -28,7 +28,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        app.telegram.TelegramDeezerClient
+                                        app.telegram.Main
                                     </mainClass>
                                 </manifest>
                             </archive>
