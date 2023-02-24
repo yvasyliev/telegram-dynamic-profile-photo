@@ -21,17 +21,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get last tag
-        id: last_tag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        with:
-          fallback: v0.0.0
-      - name: Check new tag
-        if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
+        id: get_last_tag
         run: |
+          git fetch -a
+          echo ::set-output name=tag::$(git tag --sort "-committerdate")
+      - name: Check new tag
+#        if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
+        run: |
+          echo "${{ steps.get_last_tag.tag }}"
           echo "::error::Tag ${{ env.TAG }} already exists!"
           exit 1
   setenv:
     runs-on: ubuntu-latest
+    needs: [validate]
     steps:
       - name: Set JAR_NAME_TEMPLATE
         run: |
@@ -47,6 +49,7 @@ jobs:
           echo "TAG=${{ env.TAG }}"
   release:
     runs-on: ubuntu-latest
+    needs: [setenv]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
