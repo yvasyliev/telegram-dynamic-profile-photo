@@ -33,7 +33,7 @@ jobs:
           echo "Existing tag: ${{ steps.get_latest_tag.outputs.tag }}"
           echo "New tag: ${{ env.TAG }}"
       - name: Check new tag
-        if: ${{ env.TAG }} == ${{ steps.get_latest_tag.outputs.tag }}
+        if: env.TAG == steps.get_latest_tag.outputs.tag
         run: |
           echo "::error::Tag ${{ env.TAG }} already exists!"
           exit 1
