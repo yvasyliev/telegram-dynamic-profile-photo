@@ -9,9 +9,20 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.Map;
 
+/**
+ * Program main class.
+ */
 public class Main {
+    /**
+     * {@link Logger} instance.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
+    /**
+     * Main method.
+     *
+     * @param args console args.
+     */
     public static void main(String[] args) {
         if (args.length == 0) {
             LOGGER.warn("No arguments passed!");
