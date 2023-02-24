@@ -4,7 +4,7 @@ on:
     types: [published]
 jobs:
   deploy:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: robinraju/release-downloader@v1.7
         with:
