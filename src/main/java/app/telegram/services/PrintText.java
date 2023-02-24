@@ -1,37 +1,56 @@
-package app.telegram.service;
+package app.telegram.services;
 
 import api.deezer.objects.Track;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
 
+/**
+ * Prints text on image.
+ */
 public class PrintText implements ImageProcessor {
+    /**
+     * Track to print.
+     */
     @Autowired
     private Supplier<Track> trackToPrint;
 
+    /**
+     * Outline stroke.
+     */
     @Autowired
     private Stroke outlineStroke;
 
+    /**
+     * Outline color.
+     */
     @Autowired
     private Color outlineColor;
 
+    /**
+     * Text color.
+     */
     @Autowired
     private Color textColor;
 
+    /**
+     * Font size.
+     */
     @Value("110")
     private int fontSize;
 
+    /**
+     * Base font.
+     */
     @Autowired
     private Font baseFont;
 
+    /**
+     * Offset X.
+     */
     private int offsetX = 0;
 
     @Override
@@ -49,6 +68,14 @@ public class PrintText implements ImageProcessor {
         graphics.dispose();
     }
 
+    /**
+     * Prints text on image.
+     *
+     * @param graphics   image graphics.
+     * @param text       text to print.
+     * @param imageWidth image width.
+     * @param offsetY    offset Y.
+     */
     private void print(Graphics2D graphics, String text, int imageWidth, int offsetY) {
         Shape outline = getOutline(graphics, text, imageWidth);
 
@@ -63,6 +90,14 @@ public class PrintText implements ImageProcessor {
         graphics.fill(outline);
     }
 
+    /**
+     * Calculates outline shape to fit image width.
+     *
+     * @param graphics   image graphics.
+     * @param text       text to print.
+     * @param imageWidth image width.
+     * @return outline shape.
+     */
     protected Shape getOutline(Graphics2D graphics, String text, int imageWidth) {
         Shape outline;
         float i = 0;

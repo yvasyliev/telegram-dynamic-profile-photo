@@ -14,14 +14,23 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
- * TelegramDeezerClient properties.
+ * Application properties.
  */
 public class AppProperties extends Properties {
+    /**
+     * {@link Logger} instance.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
 
+    /**
+     * Properties path.
+     */
     @Value("app.properties")
     private String propertiesPath;
 
+    /**
+     * Loads properties.
+     */
     @PostConstruct
     public void load() {
         try (InputStream inputStream = Files.newInputStream(Paths.get(propertiesPath))) {
@@ -31,6 +40,9 @@ public class AppProperties extends Properties {
         }
     }
 
+    /**
+     * Saves properties.
+     */
     @PreDestroy
     public void store() {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get(propertiesPath))) {

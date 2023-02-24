@@ -2,8 +2,8 @@ package app.telegram.commands;
 
 import api.deezer.DeezerApi;
 import api.deezer.objects.Track;
-import app.telegram.client.SyncTelegramClient;
-import app.telegram.service.ImageProcessor;
+import app.telegram.clients.SyncTelegramClient;
+import app.telegram.services.ImageProcessor;
 import app.telegram.suppliers.TrackToPrint;
 import it.tdlight.jni.TdApi;
 import org.slf4j.Logger;
@@ -22,28 +22,55 @@ import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * Updates Telegram profile photo.
+ */
 public class UpdateProfilePhoto implements Command {
+    /**
+     * {@link Logger} instance.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateProfilePhoto.class);
 
+    /**
+     * Deezer client.
+     */
     @Autowired
     private DeezerApi deezerApi;
 
+    /**
+     * Application properties.
+     */
     @Autowired
     @Qualifier("appProperties")
     private Properties appProperties;
 
+    /**
+     * Last track ID.
+     */
     @Value("#{appProperties.contains('deezer.last_track') ? appProperties.getProperty('deezer.last_track') : 0}")
     private long lastTrackId;
 
+    /**
+     * Track to print.
+     */
     @Autowired
     private TrackToPrint trackToPrint;
 
+    /**
+     * Image processors.
+     */
     @Resource
     private Queue<ImageProcessor> imageProcessorQueue;
 
+    /**
+     * Telegram client.
+     */
     @Autowired
     private SyncTelegramClient telegramClient;
 
+    /**
+     * Profile photo.
+     */
     @Autowired
     private File photo;
 
@@ -70,6 +97,13 @@ public class UpdateProfilePhoto implements Command {
         }
     }
 
+    /**
+     * Deletes current Telegram profile photo.
+     *
+     * @throws ExecutionException   if errors occur.
+     * @throws InterruptedException if errors occur.
+     * @throws TimeoutException     if errors occur.
+     */
     private void deleteCurrentPhoto() throws ExecutionException, InterruptedException, TimeoutException {
         TdApi.User me = telegramClient.send(new TdApi.GetMe());
         TdApi.ChatPhoto[] photos = telegramClient.send(new TdApi.GetUserProfilePhotos(me.id, 0, 1)).photos;

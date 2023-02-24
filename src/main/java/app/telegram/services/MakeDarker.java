@@ -1,4 +1,4 @@
-package app.telegram.service;
+package app.telegram.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -6,7 +6,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+/**
+ * Makes image darker.
+ */
 public class MakeDarker implements ImageProcessor {
+    /**
+     * Darker color.
+     */
     @Autowired
     private Color darkerColor;
 

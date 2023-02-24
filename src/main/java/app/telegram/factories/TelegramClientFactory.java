@@ -6,6 +6,9 @@ import it.tdlight.common.UpdatesHandler;
 import it.tdlight.tdlight.ClientManager;
 import org.springframework.beans.factory.FactoryBean;
 
+/**
+ * Creates TDLib Telegram client wrapper.
+ */
 public class TelegramClientFactory implements FactoryBean<TelegramClient> {
     @Override
     public TelegramClient getObject() throws Exception {

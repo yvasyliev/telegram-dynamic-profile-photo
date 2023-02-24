@@ -1,15 +1,24 @@
 package app.telegram.commands;
 
-import app.telegram.client.SyncTelegramClient;
+import app.telegram.clients.SyncTelegramClient;
 import it.tdlight.common.utils.ScannerUtils;
 import it.tdlight.jni.TdApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Logs in into Telegram.
+ */
 public class LoginTelegram implements Command {
+    /**
+     * {@link Logger} instance.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginTelegram.class);
 
+    /**
+     * Telegram client.
+     */
     @Autowired
     private SyncTelegramClient telegramClient;
 

@@ -12,22 +12,43 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Properties;
 
+/**
+ * Logs in into Deezer.
+ */
 public class LoginDeezer implements Command {
+    /**
+     * {@link Logger} instance.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginDeezer.class);
 
+    /**
+     * Deezer client wrapper.
+     */
     @Autowired
     private DeezerApi deezerApi;
 
+    /**
+     * Application properties.
+     */
     @Autowired
     @Qualifier("appProperties")
     private Properties appProperties;
 
+    /**
+     * Deezer {@code app_id}.
+     */
     @Value("#{appProperties.getProperty('deezer.app_id')}")
     private long appId;
 
+    /**
+     * Deezer {@code redirect_uri}.
+     */
     @Value("#{appProperties.getProperty('deezer.redirect_uri')}")
     private String redirectUri;
 
+    /**
+     * Deezer {@code secret}.
+     */
     @Value("#{appProperties.getProperty('deezer.secret')}")
     private String secret;
 
