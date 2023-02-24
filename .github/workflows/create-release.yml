@@ -48,15 +48,15 @@ jobs:
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
-          tag: ${{ TAG }}
+          tag: $TAG
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ TAG }}
-          release_name: ${{ TAG }}`
+          tag_name: $TAG
+          release_name: $TAG
           draft: true
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
