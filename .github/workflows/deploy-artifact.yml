@@ -27,4 +27,4 @@ jobs:
             *-jar-with-dependencies.jar => ${{ secrets.REMOTE_DIR }}
           last_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
-            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar "$(ls -d *.jar)" telegram.change_photo" >> ${{ secrets.RUN_CMD }}
+            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar "$(ls -d *.jar)" telegram.update_photo" >> ${{ secrets.RUN_CMD }}
