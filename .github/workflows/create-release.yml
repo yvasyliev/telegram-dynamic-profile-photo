@@ -26,6 +26,8 @@ jobs:
         id: get_last_tag
         run: |
           git fetch -a
+          echo "$(git tag --sort "-committerdate" | cut -d$'\n' -f1 | cut -d. -f1)"
+          git tag --sort "-committerdate"
           echo ::set-output name=tag::$(git tag --sort "-committerdate" | cut -d$'\n' -f1 | cut -d. -f1)
       - name: Check new tag
 #        if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
