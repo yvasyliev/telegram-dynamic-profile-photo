@@ -8,9 +8,9 @@ on:
         required: true
 
 env:
+  REMOTE_DIR: /telegram-dynamic-profile-photo
   JAR_NAME_TEMPLATE: telegram-dynamic-profile-photo-*-jar-with-dependencies.jar
   TAG: v${{ github.event.inputs.version }}
-  REMOTE_DIR: /telegram-dynamic-profile-photo
   DEEZER_LOGIN_CMD: deezer_login.sh
   TELEGRAM_LOGIN_CMD: telegram_login.sh
   TELEGRAM_LOGOUT_CMD: telegram_logout.sh
