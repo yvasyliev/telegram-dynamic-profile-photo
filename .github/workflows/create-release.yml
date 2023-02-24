@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "JAR_NAME_TEMPLATE=${{ env.JAR_NAME_PREFIX }}*${{ env.JAR_NAME_SUFFIX }}" >> $GITHUB_ENV
           echo "JAR_NAME=${{ env.JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ env.JAR_NAME_SUFFIX }}" >> $GITHUB_ENV
-          echo "JAR_PATH=target/"$JAR_NAME >> $GITHUB_ENV
+          echo "JAR_PATH=target/"${{ env.JAR_NAME }}" >> $GITHUB_ENV
       - name: Show env variables
         run: |
           echo "JAR_NAME_TEMPLATE=$JAR_NAME_TEMPLATE"
