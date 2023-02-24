@@ -17,19 +17,22 @@ env:
   TELEGRAM_UPDATE_PHOTO_CMD: telegram_update_photo.sh
 
 jobs:
-  release:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Get last tag
         id: last_tag
         uses: WyriHaximus/github-action-get-previous-tag@v1
         with:
-          fallback: 0.0.0
+          fallback: v0.0.0
       - name: Check new tag
         if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
         run: |
           echo "::error::Tag ${{ env.TAG }} already exists!"
           exit 1
+  setenv:
+    runs-on: ubuntu-latest
+    steps:
       - name: Set JAR_NAME_TEMPLATE
         run: |
           echo "JAR_NAME=${{ env.JAR_NAME_TEMPLATE }}" | sed "s/*/${{ github.event.inputs.version }}/g" >> $GITHUB_ENV
@@ -42,6 +45,9 @@ jobs:
           echo "JAR_NAME=${{ env.JAR_NAME }}"
           echo "JAR_PATH=${{ env.JAR_PATH }}"
           echo "TAG=${{ env.TAG }}"
+  release:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up JDK 8
