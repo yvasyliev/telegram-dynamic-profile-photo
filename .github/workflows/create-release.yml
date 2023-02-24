@@ -38,10 +38,6 @@ jobs:
       - name: Get latest tag
         id: get_latest_tag
         uses: actions-ecosystem/action-get-latest-tag@v1
-      - name: Print tags
-        run: |
-          echo "Existing tag: ${{ steps.get_latest_tag.outputs.tag }}"
-          echo "New tag: ${{ env.TAG }}"
       - name: Check new tag
         if: env.TAG == steps.get_latest_tag.outputs.tag
         run: |
