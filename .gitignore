@@ -3,6 +3,7 @@
 
 # Log file
 *.log
+*.gz
 
 # BlueJ files
 *.ctxt
@@ -29,6 +30,7 @@ hs_err_pid*
 target
 app.properties
 logback.xml
+*.png
 
 # Telegram files
 .cache
