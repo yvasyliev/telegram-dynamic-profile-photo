@@ -1,12 +1,22 @@
 name: Create Release
+
 on:
   workflow_dispatch:
     inputs:
       version:
         description: "Release version"
         required: true
+
+env:
+  JAR_NAME_PREFIX: telegram-dynamic-profile-photo-
+  JAR_NAME_SUFFIX: -jar-with-dependencies.jar
+  JAR_NAME_TEMPLATE: ${{ JAR_NAME_PREFIX }}*${{ JAR_NAME_SUFFIX }}
+  JAR_NAME: ${{ JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ JAR_NAME_SUFFIX }}
+  JAR_PATH: target/${{ JAR_NAME }}
+  TAG: v${{ github.event.inputs.version }}
+
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,29 +39,30 @@ jobs:
           first_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
             > ${{ secrets.RUN_CMD }}
-            rm -rf telegram-dynamic-profile-photo-*-jar-with-dependencies.jar
+            rm -rf ${{ JAR_NAME_TEMPLATE }}
           scp: |
-            target/telegram-dynamic-profile-photo-${{ github.event.inputs.version }}-jar-with-dependencies.jar => ${{ secrets.REMOTE_DIR }}
+            ${{ JAR_PATH }} => ${{ secrets.REMOTE_DIR }}
           last_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
-            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar telegram-dynamic-profile-photo-${{ github.event.inputs.version }}-jar-with-dependencies.jar telegram.update_photo" >> ${{ secrets.RUN_CMD }}
+            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar ${{ JAR_NAME }} telegram.update_photo" >> ${{ secrets.RUN_CMD }}
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
-          tag: v${{ github.event.inputs.version }}
+          tag: ${{ TAG }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.event.inputs.version }}
-          release_name: v${{ github.event.inputs.version }}`
+          tag_name: ${{ TAG }}
+          release_name: ${{ TAG }}`
           draft: true
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: target/telegram-dynamic-profile-photo-${{ github.event.inputs.version }}-jar-with-dependencies.jar
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ JAR_PATH }}
+          asset_name: ${{ JAR_NAME }}
