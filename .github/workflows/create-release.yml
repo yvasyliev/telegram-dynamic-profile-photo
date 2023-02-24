@@ -97,7 +97,7 @@ jobs:
           asset_content_type: application/java-archive
   remote-upload:
     runs-on: ubuntu-latest
-    needs: [check-tag]
+    needs: [check-input, check-tag]
     steps:
       - name: Set JAR_NAME
         run: |
