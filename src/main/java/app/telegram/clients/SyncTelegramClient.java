@@ -1,4 +1,4 @@
-package app.telegram.client;
+package app.telegram.clients;
 
 import it.tdlight.client.TDLibSettings;
 import it.tdlight.common.TelegramClient;

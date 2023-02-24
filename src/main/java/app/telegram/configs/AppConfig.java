@@ -1,7 +1,7 @@
-package app.telegram.config;
+package app.telegram.configs;
 
 import api.deezer.DeezerApi;
-import app.telegram.client.SyncTelegramClient;
+import app.telegram.clients.SyncTelegramClient;
 import app.telegram.commands.Command;
 import app.telegram.commands.LoginDeezer;
 import app.telegram.commands.LoginTelegram;
@@ -9,9 +9,9 @@ import app.telegram.commands.LogoutTelegram;
 import app.telegram.commands.UpdateProfilePhoto;
 import app.telegram.factories.TelegramClientFactory;
 import app.telegram.properties.AppProperties;
-import app.telegram.service.ImageProcessor;
-import app.telegram.service.MakeDarker;
-import app.telegram.service.PrintText;
+import app.telegram.services.ImageProcessor;
+import app.telegram.services.MakeDarker;
+import app.telegram.services.PrintText;
 import app.telegram.suppliers.TrackToPrint;
 import it.tdlight.client.APIToken;
 import it.tdlight.client.TDLibSettings;
@@ -34,6 +34,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Queue;
 
+/**
+ * Spring context config.
+ */
 @Configuration
 public class AppConfig {
     @Autowired

@@ -1,4 +1,4 @@
-package app.telegram.service;
+package app.telegram.services;
 
 import java.awt.image.BufferedImage;
 
