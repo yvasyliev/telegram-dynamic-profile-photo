@@ -25,15 +25,15 @@ jobs:
       - name: Get latest tag
         id: get_latest_tag
         uses: actions-ecosystem/action-get-latest-tag@v1
-        with:
-          with_initial_version: true
-          initial_version: v2.0.0
+#        with:
+#          with_initial_version: true
+#          initial_version: v2.0.0
       - name: Print tags
         run: |
-          echo "Existing tag: ${{ steps.last_tag.outputs.tag }}"
+          echo "Existing tag: ${{ steps.get_latest_tag.outputs.tag }}"
           echo "New tag: ${{ env.TAG }}"
       - name: Check new tag
-        if: ${{ steps.last_tag.outputs.tag }} != '' && ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
+        if: ${{ env.TAG }} == ${{ steps.get_latest_tag.outputs.tag }}
         run: |
           echo "::error::Tag ${{ env.TAG }} already exists!"
           exit 1
