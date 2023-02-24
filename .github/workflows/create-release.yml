@@ -20,6 +20,19 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Get last tag
+        id: last_tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        with:
+          fallback: 0.0.0
+      - name: Check new tag
+        if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
+        steps:
+          - name: A/B Check
+            if: ${{ envA }} != ${{ envB }}
+            run: |
+              echo "::error::Tag ${{ env.TAG }} already exists!"
+              exit 1
       - name: Set JAR_NAME_TEMPLATE
         run: |
           echo "JAR_NAME=${{ env.JAR_NAME_TEMPLATE }}" | sed "s/*/${{ github.event.inputs.version }}/g" >> $GITHUB_ENV
