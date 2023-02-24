@@ -15,9 +15,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Set JAR_NAME_TEMPLATE, JAR_NAME
+      - name: Set JAR_NAME_TEMPLATE
         run: |
-          echo "JAR_NAME=${{ env.JAR_NAME_TEMPLATE }}" | tr * ${{ github.event.inputs.version }} >> $GITHUB_ENV
+          echo "JAR_NAME=${{ env.JAR_NAME_TEMPLATE }}" | sed "s/*/${{ github.event.inputs.version }}/g" >> $GITHUB_ENV
       - name: Set JAR_PATH
         run: |
           echo "JAR_PATH=target/${{ env.JAR_NAME }}" >> $GITHUB_ENV
