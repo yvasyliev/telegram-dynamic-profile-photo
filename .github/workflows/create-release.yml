@@ -19,7 +19,7 @@ jobs:
       - name: Set JAR_NAME_TEMPLATE, JAR_NAME
         run: |
           echo "JAR_NAME_TEMPLATE=$JAR_NAME_PREFIX*$JAR_NAME_SUFFIX" >> $GITHUB_ENV
-          echo "JAR_NAME=$JAR_NAME_PREFIX${{ github.event.inputs.version }}$JAR_NAME_SUFFIX" >> $GITHUB_ENV
+          echo "JAR_NAME=${{ JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ JAR_NAME_SUFFIX}}" >> $GITHUB_ENV
       - name: Set JAR_PATH
         run: |
           echo "JAR_PATH=target/$JAR_NAME" >> $GITHUB_ENV
@@ -29,7 +29,6 @@ jobs:
           echo "JAR_NAME=$JAR_NAME"
           echo "JAR_PATH=$JAR_PATH"
           echo "TAG=$TAG"
-          echo "TAG="$TAG
 #      - name: Checkout
 #        uses: actions/checkout@v3
 #      - name: Set up JDK 8
