@@ -10,9 +10,9 @@ on:
 env:
   JAR_NAME_PREFIX: telegram-dynamic-profile-photo-
   JAR_NAME_SUFFIX: -jar-with-dependencies.jar
-  JAR_NAME_TEMPLATE: $JAR_NAME_PREFIX*$JAR_NAME_SUFFIX
-  JAR_NAME: $JAR_NAME_PREFIX${{ github.event.inputs.version }}$JAR_NAME_SUFFIX
-  JAR_PATH: target/$JAR_NAME
+  JAR_NAME_TEMPLATE: ${{ JAR_NAME_PREFIX }}*${{ JAR_NAME_SUFFIX }}
+  JAR_NAME: ${{ JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ JAR_NAME_SUFFIX }}
+  JAR_PATH: target/${{ JAR_NAME }}
   TAG: v${{ github.event.inputs.version }}
 
 jobs:
