@@ -22,7 +22,7 @@ jobs:
           first_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
             > ${{ secrets.RUN_CMD }}
-            rm -rf *.jar ${{ secrets.RUN_CMD }}
+            rm -rf *.jar
           scp: |
             *-jar-with-dependencies.jar => ${{ secrets.REMOTE_DIR }}
           last_ssh: |
