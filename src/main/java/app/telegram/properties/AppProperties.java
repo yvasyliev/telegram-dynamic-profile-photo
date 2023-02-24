@@ -1,49 +1,54 @@
 package app.telegram.properties;
 
-import java.io.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
- * TelegramDeezerClient properties.
+ * Application properties.
  */
 public class AppProperties extends Properties {
     /**
-     * Default properties path.
+     * {@link Logger} instance.
      */
-    private static final String DEFAULT_PATH = "app.properties";
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppProperties.class);
 
     /**
-     * Actual properties path.
+     * Properties path.
      */
-    private final String path;
-
-    public AppProperties() {
-        this(DEFAULT_PATH);
-    }
-
-    public AppProperties(String path) {
-        this.path = path;
-    }
+    @Value("app.properties")
+    private String propertiesPath;
 
     /**
-     * Loads properties from {@link AppProperties#path}.
-     *
-     * @throws IOException if reading errors occur.
+     * Loads properties.
      */
-    public void load() throws IOException {
-        try (InputStream inputStream = new FileInputStream(DEFAULT_PATH)) {
+    @PostConstruct
+    public void load() {
+        try (InputStream inputStream = Files.newInputStream(Paths.get(propertiesPath))) {
             load(inputStream);
+        } catch (IOException e) {
+            LOGGER.error("Failed to read properties {}.", propertiesPath, e);
         }
     }
 
     /**
-     * Saves properties by {@link AppProperties#path}.
-     *
-     * @throws IOException if writing errors occur.
+     * Saves properties.
      */
-    public void save() throws IOException {
-        try (OutputStream outputStream = new FileOutputStream(path)) {
+    @PreDestroy
+    public void store() {
+        try (OutputStream outputStream = Files.newOutputStream(Paths.get(propertiesPath))) {
             store(outputStream, null);
+        } catch (IOException e) {
+            LOGGER.error("Failed to write properties {}.", propertiesPath, e);
         }
     }
 }
