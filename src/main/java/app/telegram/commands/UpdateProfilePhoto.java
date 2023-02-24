@@ -6,6 +6,8 @@ import app.telegram.client.SyncTelegramClient;
 import app.telegram.service.ImageProcessor;
 import app.telegram.suppliers.TrackToPrint;
 import it.tdlight.jni.TdApi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 public class UpdateProfilePhoto implements Command {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateProfilePhoto.class);
+
     @Autowired
     private DeezerApi deezerApi;
 
@@ -62,6 +66,7 @@ public class UpdateProfilePhoto implements Command {
             ));
 
             appProperties.setProperty("deezer.last_track", lastTrack.getId().toString());
+            LOGGER.info("Updated Telegram profile photo.");
         }
     }
 
