@@ -8,8 +8,7 @@ on:
         required: true
 
 env:
-  JAR_NAME_PREFIX: telegram-dynamic-profile-photo-
-  JAR_NAME_SUFFIX: -jar-with-dependencies.jar
+  JAR_NAME_TEMPLATE: telegram-dynamic-profile-photo-*-jar-with-dependencies.jar
   TAG: v${{ github.event.inputs.version }}
 
 jobs:
@@ -18,8 +17,7 @@ jobs:
     steps:
       - name: Set JAR_NAME_TEMPLATE, JAR_NAME
         run: |
-          echo "JAR_NAME_TEMPLATE=$JAR_NAME_PREFIX*$JAR_NAME_SUFFIX" >> $GITHUB_ENV
-          echo "JAR_NAME=${{ env.JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ env.JAR_NAME_SUFFIX}}" >> $GITHUB_ENV
+          echo "JAR_NAME=${{ env.JAR_NAME_TEMPLATE }}" | tr * ${{ github.event.inputs.version }} >> $GITHUB_ENV
       - name: Set JAR_PATH
         run: |
           echo "JAR_PATH=target/${{ env.JAR_NAME }}" >> $GITHUB_ENV
@@ -74,6 +72,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "$JAR_PATH"
+          asset_path: ${{ env.$JAR_PATH }}
           asset_name: ${{ env.JAR_NAME }}
           asset_content_type: application/java-archive
