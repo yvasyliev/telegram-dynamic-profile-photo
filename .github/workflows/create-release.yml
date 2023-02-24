@@ -10,10 +10,7 @@ on:
 env:
   JAR_NAME_PREFIX: telegram-dynamic-profile-photo-
   JAR_NAME_SUFFIX: -jar-with-dependencies.jar
-#  JAR_NAME_TEMPLATE: ${{ JAR_NAME_PREFIX }}*${{ JAR_NAME_SUFFIX }}
-#  JAR_NAME: ${{ JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ JAR_NAME_SUFFIX }}
-#  JAR_PATH: target/${{ JAR_NAME }}
-#  TAG: v${{ github.event.inputs.version }}
+  TAG: v${{ github.event.inputs.version }}
 
 jobs:
   release:
@@ -21,7 +18,10 @@ jobs:
     steps:
       - name: Set env variables
         run: |
-          echo "JAR_NAME_TEMPLATE=${{ JAR_NAME_PREFIX }}*${{ JAR_NAME_SUFFIX }}" >> $GITHUB_ENV
+          echo "JAR_NAME_TEMPLATE=${{ env.JAR_NAME_PREFIX }}*${{ env.JAR_NAME_SUFFIX }}" >> $GITHUB_ENV
+          echo "JAR_NAME=${{ env.JAR_NAME_PREFIX }}${{ github.event.inputs.version }}${{ env.JAR_NAME_SUFFIX }}" >> $GITHUB_ENV
+          echo "JAR_PATH=target/$JAR_NAME" >> $GITHUB_ENV
+          echo "TAG=v${{ github.event.inputs.version }}" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up JDK 8
@@ -42,12 +42,12 @@ jobs:
           first_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
             > ${{ secrets.RUN_CMD }}
-            rm -rf ${{ env.JAR_NAME_TEMPLATE }}
+            rm -rf $JAR_NAME_TEMPLATE
           scp: |
-            ${{ env.JAR_PATH }} => ${{ secrets.REMOTE_DIR }}
+            $JAR_PATH => ${{ secrets.REMOTE_DIR }}
           last_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
-            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar ${{ env.JAR_NAME }} telegram.update_photo" >> ${{ secrets.RUN_CMD }}
+            echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar $JAR_NAME telegram.update_photo" >> ${{ secrets.RUN_CMD }}
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
@@ -67,6 +67,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.JAR_PATH }}
-          asset_name: ${{ env.JAR_NAME }}
+          asset_path: $JAR_PATH
+          asset_name: $JAR_NAME
           asset_content_type: application/java-archive
