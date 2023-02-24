@@ -24,7 +24,7 @@ jobs:
             > ${{ secrets.RUN_CMD }}
             rm -rf *.jar ${{ secrets.RUN_CMD }}
           scp: |
-            *-jar-with-dependencies.jar => ${{ secrets.REMOTE_DIR }
+            *-jar-with-dependencies.jar => ${{ secrets.REMOTE_DIR }}
           last_ssh: |
             cd ${{ secrets.REMOTE_DIR }}
             echo -e "cd ${{ secrets.REMOTE_DIR }}\njava -jar "$(ls -d *.jar)" telegram.change_photo" >> ${{ secrets.RUN_CMD }}
