@@ -20,25 +20,14 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+#      - name: Checkout
+#        uses: actions/checkout@v3
       - name: Get latest tag
-        uses: actions-ecosystem/action-get-latest-tag@v1
         id: get_latest_tag
-      - name: Fetch
-        run: |
-          echo ${{ steps.get_latest_tag.outputs.tag }}
-          git fetch -a
-      - name: Get last tag
-        id: get_last_tag
-        run: |
-          echo "$(git tag --sort "-committerdate" | cut -d$'\n' -f1)"
-          git tag --sort "-committerdate"
-          echo ::set-output name=tag::$(git tag --sort "-committerdate" | cut -d$'\n' -f1 | cut -d. -f1)
+        uses: actions-ecosystem/action-get-latest-tag@v1
       - name: Check new tag
-#        if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
+        if: ${{ env.TAG }} == ${{ steps.last_tag.outputs.tag }}
         run: |
-          echo "${{ steps.get_last_tag.tag }}"
           echo "::error::Tag ${{ env.TAG }} already exists!"
           exit 1
   setenv:
