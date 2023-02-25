@@ -13,7 +13,7 @@ public class TelegramClientFactory implements FactoryBean<TelegramClient> {
     @Override
     public TelegramClient getObject() throws Exception {
         Init.start();
-        TelegramClient telegramClient = ClientManager.create();
+        var telegramClient = ClientManager.create();
         telegramClient.initialize((UpdatesHandler) null, null, null);
         return telegramClient;
     }

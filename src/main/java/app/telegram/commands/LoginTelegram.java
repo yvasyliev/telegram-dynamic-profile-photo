@@ -24,15 +24,15 @@ public class LoginTelegram implements Command {
 
     @Override
     public void execute() throws Exception {
-        TdApi.AuthorizationState authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
+        var authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
         if (authorizationState instanceof TdApi.AuthorizationStateReady) {
             throw new IllegalStateException("The user is already logged in!");
         }
 
-        String phoneNumber = ScannerUtils.askParameter("phone number", "Please enter phone number");
+        var phoneNumber = ScannerUtils.askParameter("phone number", "Please enter phone number");
         telegramClient.send(new TdApi.SetAuthenticationPhoneNumber(phoneNumber, null));
 
-        String code = ScannerUtils.askParameter(phoneNumber, "Please enter code");
+        var code = ScannerUtils.askParameter(phoneNumber, "Please enter code");
         telegramClient.send(new TdApi.CheckAuthenticationCode(code));
 
         LOGGER.info("Logged in into Telegram.");

@@ -4,7 +4,12 @@ import api.deezer.objects.Track;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
 
@@ -55,12 +60,12 @@ public class PrintText implements ImageProcessor {
 
     @Override
     public void process(BufferedImage image) {
-        Graphics2D graphics = image.createGraphics();
+        var graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         graphics.setStroke(outlineStroke);
 
-        Track track = trackToPrint.get();
+        var track = trackToPrint.get();
         print(graphics, "Just listened to", image.getWidth(), 350);
         print(graphics, "\"" + track.getTitle() + "\"", image.getWidth(), 150);
         print(graphics, "by " + track.getArtist().getName(), image.getWidth(), 150);
@@ -77,7 +82,7 @@ public class PrintText implements ImageProcessor {
      * @param offsetY    offset Y.
      */
     private void print(Graphics2D graphics, String text, int imageWidth, int offsetY) {
-        Shape outline = getOutline(graphics, text, imageWidth);
+        var outline = getOutline(graphics, text, imageWidth);
 
         graphics.translate(-offsetX, 0);
         offsetX = (imageWidth - outline.getBounds().width) / 2;
@@ -100,7 +105,7 @@ public class PrintText implements ImageProcessor {
      */
     protected Shape getOutline(Graphics2D graphics, String text, int imageWidth) {
         Shape outline;
-        float i = 0;
+        var i = 0f;
 
         do {
             graphics.setFont(baseFont.deriveFont(fontSize - i));

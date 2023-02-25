@@ -59,7 +59,7 @@ public class AppConfig {
 
     @Bean
     public Map<String, Command> commandMap() {
-        Map<String, Command> commandMap = new HashMap<>();
+        var commandMap = new HashMap<String, Command>();
         commandMap.put("deezer.login", loginDeezer());
         commandMap.put("telegram.login", loginTelegram());
         commandMap.put("telegram.logout", logoutTelegram());
@@ -119,7 +119,7 @@ public class AppConfig {
 
     @Bean
     public Queue<ImageProcessor> imageProcessorQueue() {
-        Queue<ImageProcessor> imageProcessorQueue = new ArrayDeque<>();
+        var imageProcessorQueue = new ArrayDeque<ImageProcessor>();
         imageProcessorQueue.add(makeDarker());
         imageProcessorQueue.add(printText());
         return imageProcessorQueue;

@@ -12,9 +12,7 @@
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Pattern>
             </PatternLayout>
             <Policies>
-<!--                <OnStartupTriggeringPolicy/>-->
                 <SizeBasedTriggeringPolicy size="25 MB"/>
-<!--                <TimeBasedTriggeringPolicy/>-->
             </Policies>
             <DefaultRolloverStrategy>
                 <Delete basePath="" maxDepth="1000000">
@@ -26,7 +24,7 @@
     </Appenders>
     <Loggers>
         <Root level="ALL">
-            <AppenderRef ref="stdout" />
+            <AppenderRef ref="stdout"/>
             <AppenderRef ref="roll-by-time-and-size"/>
         </Root>
         <Logger name="org.springframework" level="off"/>

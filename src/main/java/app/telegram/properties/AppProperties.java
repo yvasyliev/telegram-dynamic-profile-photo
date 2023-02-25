@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -33,7 +31,7 @@ public class AppProperties extends Properties {
      */
     @PostConstruct
     public void load() {
-        try (InputStream inputStream = Files.newInputStream(Paths.get(propertiesPath))) {
+        try (var inputStream = Files.newInputStream(Paths.get(propertiesPath))) {
             load(inputStream);
         } catch (IOException e) {
             LOGGER.error("Failed to read properties {}.", propertiesPath, e);
@@ -45,7 +43,7 @@ public class AppProperties extends Properties {
      */
     @PreDestroy
     public void store() {
-        try (OutputStream outputStream = Files.newOutputStream(Paths.get(propertiesPath))) {
+        try (var outputStream = Files.newOutputStream(Paths.get(propertiesPath))) {
             store(outputStream, null);
         } catch (IOException e) {
             LOGGER.error("Failed to write properties {}.", propertiesPath, e);

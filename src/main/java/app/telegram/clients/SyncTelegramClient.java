@@ -47,7 +47,7 @@ public class SyncTelegramClient {
      */
     @SuppressWarnings("unchecked")
     public <T extends TdApi.Object> T send(TdApi.Function<T> request) throws ExecutionException, InterruptedException, TimeoutException {
-        CompletableFuture<TdApi.Object> response = new CompletableFuture<>();
+        var response = new CompletableFuture<>();
         telegramClient.send(request, response::complete, response::completeExceptionally);
         return (T) response.get(timeout, TimeUnit.SECONDS);
     }
