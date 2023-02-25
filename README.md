@@ -1,4 +1,13 @@
 ![Build status](https://github.com/yvasyliev/telegram-deezer-client/actions/workflows/build-maven-project.yml/badge.svg?branch=main)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=bugs)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=yvasyliev_telegram-deezer-client&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=yvasyliev_telegram-deezer-client)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/yvasyliev/telegram-deezer-client/blob/main/LICENSE)
 # Telegram Dynamic Profile Photo
 A custom Telegram client that displays [Deezer](https://deezer.com)'s last listened track on profile photo.
