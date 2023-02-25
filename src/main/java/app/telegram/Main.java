@@ -5,7 +5,6 @@ import app.telegram.configs.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.Map;
 
@@ -30,11 +29,11 @@ public class Main {
         }
 
         try {
-            AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+            var context = new AnnotationConfigApplicationContext(AppConfig.class);
             context.registerShutdownHook();
 
-            Map<?, ?> commandMap = context.getBean("commandMap", Map.class);
-            Command command = (Command) commandMap.get(args[0]);
+            var commandMap = context.getBean("commandMap", Map.class);
+            var command = (Command) commandMap.get(args[0]);
 
             if (command != null) {
                 command.execute();

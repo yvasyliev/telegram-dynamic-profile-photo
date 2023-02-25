@@ -3,7 +3,6 @@ package app.telegram.services;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
@@ -18,7 +17,7 @@ public class MakeDarker implements ImageProcessor {
 
     @Override
     public void process(BufferedImage image) {
-        Graphics graphics = image.getGraphics();
+        var graphics = image.getGraphics();
         graphics.setColor(darkerColor);
         graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         graphics.dispose();
