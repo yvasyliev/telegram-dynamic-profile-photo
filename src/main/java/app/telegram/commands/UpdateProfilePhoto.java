@@ -47,7 +47,7 @@ public class UpdateProfilePhoto implements Command {
     /**
      * Last track ID.
      */
-    @Value("#{appProperties.contains('deezer.last_track') ? appProperties.getProperty('deezer.last_track') : 0}")
+    @Value("#{appProperties.containsKey('deezer.last_track') ? appProperties.getProperty('deezer.last_track') : 0}")
     private long lastTrackId;
 
     /**
