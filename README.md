@@ -24,7 +24,7 @@ Also [Deezer API Java Library](https://github.com/yvasyliev/deezer-api) is used 
    `git clone https://github.com/yvasyliev/telegram-dynamic-profile-photo.git`
 2. Build the application.<br/>
    `mvn clean package`
-3. Find in `target` folder a `telegram-dynamic-profile-photo-x.y.z-jar-with-dependencies.jar` file.<br/>
+3. Find in `target` folder a `telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar` file.<br/>
 4. Create `app.properties` file in the same folder as `telegram-dynamic-profile-photo-x.y.z-jar-with-dependencies.jar`.<br/>
 5. Put the following content into `app.properties` file:<br/>
 ```properties
@@ -32,8 +32,6 @@ Also [Deezer API Java Library](https://github.com/yvasyliev/deezer-api) is used 
 telegram.api_hash=your_api_hash
 #To get telegram.api_id see https://core.telegram.org/api/obtaining_api_id
 telegram.api_id=XXXXXXX
-#Your phone number
-telegram.phone_number=+XXXXXXXXXXXX
 #To get deezer.app_id see https://developers.deezer.com/myapps
 deezer.app_id=XXXXXX
 #deezer.redirect_uri must be the same as 'Application domain' in https://developers.deezer.com/myapps
@@ -42,10 +40,10 @@ deezer.redirect_uri=https://your.domain.com
 deezer.secret=deezer_app_secret_key
 ```
 6. Login to Deezer. You must follow the link which will be printed to console and accept app permissions.<br/>
-   `java -jar telegram-dynamic-profile-photo-x.y.z-jar-with-dependencies.jar deezer.login`
+   `java -jar telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar deezer.login`
 7. Login to your custom Telegram client. You will be prompted to enter authentication code.<br/>
-   `java -jar telegram-dynamic-profile-photo-x.y.z-jar-with-dependencies.jar telegram.login`
+   `java -jar telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar telegram.login`
 8. Update your profile photo.<br/>
-   `java -jar telegram-dynamic-profile-photo-x.y.z-jar-with-dependencies.jar telegram.change_photo`
+   `java -jar telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar telegram.change_photo`
 9. (Optional) Logout from the client.<br/>
-   `java -jar telegram-dynamic-profile-photo-x.y.z-jar-with-dependencies.jar telegram.logout`
+   `java -jar telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar telegram.logout`
