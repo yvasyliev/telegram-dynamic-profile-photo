@@ -52,7 +52,7 @@ public class AppConfig {
     @Value("#{appProperties.getProperty('telegram.api_hash')}")
     private String telegramApiHash;
 
-    @Bean
+    @Bean(initMethod = "load", destroyMethod = "store")
     public Properties appProperties() {
         return new AppProperties();
     }
