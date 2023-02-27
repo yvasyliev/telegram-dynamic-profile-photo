@@ -6,7 +6,7 @@
 
     <groupId>com.github.yvasyliev</groupId>
     <artifactId>telegram-dynamic-profile-photo</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -96,11 +96,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>6.0.5</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
         </dependency>
     </dependencies>
 </project>

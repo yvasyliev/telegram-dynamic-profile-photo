@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.net.URL;
@@ -45,7 +44,7 @@ public class UpdateProfilePhoto implements Command {
     /**
      * Last track ID.
      */
-    @Value("#{appProperties.containsKey('deezer.last_track') ? appProperties.getProperty('deezer.last_track') : 0}")
+    @Value("#{appProperties.getProperty('deezer.last_track', '0')}")
     private long lastTrackId;
 
     /**
@@ -57,7 +56,8 @@ public class UpdateProfilePhoto implements Command {
     /**
      * Image processors.
      */
-    @Resource
+    @Autowired
+    @Qualifier("imageProcessorQueue")
     private Queue<ImageProcessor> imageProcessorQueue;
 
     /**

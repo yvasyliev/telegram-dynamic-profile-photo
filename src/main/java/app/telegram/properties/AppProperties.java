@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,7 +27,6 @@ public class AppProperties extends Properties {
     /**
      * Loads properties.
      */
-    @PostConstruct
     public void load() {
         try (var inputStream = Files.newInputStream(Paths.get(propertiesPath))) {
             load(inputStream);
@@ -41,7 +38,6 @@ public class AppProperties extends Properties {
     /**
      * Saves properties.
      */
-    @PreDestroy
     public void store() {
         try (var outputStream = Files.newOutputStream(Paths.get(propertiesPath))) {
             store(outputStream, null);
