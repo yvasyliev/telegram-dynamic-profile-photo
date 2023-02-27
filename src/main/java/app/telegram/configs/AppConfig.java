@@ -82,7 +82,7 @@ public class AppConfig {
         return new LoginTelegram();
     }
 
-    @Bean
+    @Bean(initMethod = "setTdlibParameters", destroyMethod = "close")
     public SyncTelegramClient syncTelegramClient() {
         return new SyncTelegramClient();
     }

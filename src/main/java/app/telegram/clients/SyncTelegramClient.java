@@ -6,8 +6,6 @@ import it.tdlight.jni.TdApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +58,6 @@ public class SyncTelegramClient {
      * @throws InterruptedException if errors occur.
      * @throws TimeoutException     if errors occur.
      */
-    @PostConstruct
     public TdApi.Ok setTdlibParameters() throws ExecutionException, InterruptedException, TimeoutException {
         return send(new TdApi.SetTdlibParameters(
                 tdLibSettings.isUsingTestDatacenter(),
@@ -90,7 +87,6 @@ public class SyncTelegramClient {
      * @throws InterruptedException if errors occur.
      * @throws TimeoutException     if errors occur.
      */
-    @PreDestroy
     public TdApi.Ok close() throws ExecutionException, InterruptedException, TimeoutException {
         return send(new TdApi.Close());
     }
