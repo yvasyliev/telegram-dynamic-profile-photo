@@ -22,8 +22,7 @@ Also, [Deezer API Java Library](https://github.com/yvasyliev/deezer-api) is used
 
 ## Requirements
 
-1. JDK 8 (or higher)
-2. Maven
+* `Java 17` (JRE)
 
 ## Quickstart
 
