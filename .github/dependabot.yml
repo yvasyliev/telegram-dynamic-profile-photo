@@ -11,3 +11,6 @@ updates:
       interval: "daily"
     assignees:
       - "yvasyliev"
+    ignore:
+      - dependency-name: "tdlight-java-bom"
+        versions: ["*-ssl3"]
