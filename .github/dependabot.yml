@@ -11,3 +11,10 @@ updates:
       interval: "daily"
     assignees:
       - "yvasyliev"
+    ignore:
+      - dependency-name: "it.tdlight:tdlight-java-bom"
+        versions: ["x.y.z.a-ssl3"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
