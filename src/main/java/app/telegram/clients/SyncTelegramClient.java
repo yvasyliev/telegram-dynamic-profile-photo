@@ -4,12 +4,8 @@ import it.tdlight.client.TDLibSettings;
 import it.tdlight.common.TelegramClient;
 import it.tdlight.jni.TdApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Synchronized Telegram client wrapper.
@@ -28,37 +24,25 @@ public class SyncTelegramClient {
     private TDLibSettings tdLibSettings;
 
     /**
-     * Response reading timeout.
-     */
-    @Value("5")
-    private long timeout;
-
-    /**
      * Sends Telegram API request synchronously.
      *
      * @param request Telegram API request.
      * @param <T>     Telegram API response type.
      * @return Telegram API response.
-     * @throws ExecutionException   if errors occur.
-     * @throws InterruptedException if errors occur.
-     * @throws TimeoutException     if errors occur.
      */
     @SuppressWarnings("unchecked")
-    public <T extends TdApi.Object> T send(TdApi.Function<T> request) throws ExecutionException, InterruptedException, TimeoutException {
+    public <T extends TdApi.Object> T send(TdApi.Function<T> request) {
         var response = new CompletableFuture<>();
         telegramClient.send(request, response::complete, response::completeExceptionally);
-        return (T) response.get(timeout, TimeUnit.SECONDS);
+        return (T) response.join();
     }
 
     /**
      * Sets TDLib settings.
      *
      * @return {@link TdApi.Ok} response.
-     * @throws ExecutionException   if errors occur.
-     * @throws InterruptedException if errors occur.
-     * @throws TimeoutException     if errors occur.
      */
-    public TdApi.Ok setTdlibParameters() throws ExecutionException, InterruptedException, TimeoutException {
+    public TdApi.Ok setTdlibParameters() {
         return send(new TdApi.SetTdlibParameters(
                 tdLibSettings.isUsingTestDatacenter(),
                 tdLibSettings.getDatabaseDirectoryPath().toString(),
@@ -83,11 +67,8 @@ public class SyncTelegramClient {
      * Sends {@link TdApi.Close} request.
      *
      * @return {@link TdApi.Ok} response.
-     * @throws ExecutionException   if errors occur.
-     * @throws InterruptedException if errors occur.
-     * @throws TimeoutException     if errors occur.
      */
-    public TdApi.Ok close() throws ExecutionException, InterruptedException, TimeoutException {
+    public TdApi.Ok close() {
         return send(new TdApi.Close());
     }
 }
