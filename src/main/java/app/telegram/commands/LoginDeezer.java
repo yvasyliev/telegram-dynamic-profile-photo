@@ -36,19 +36,19 @@ public class LoginDeezer implements Command {
     /**
      * Deezer {@code app_id}.
      */
-    @Value("#{appProperties.getProperty('deezer.app_id')}")
+    @Value("${deezer.app_id}")
     private long appId;
 
     /**
      * Deezer {@code redirect_uri}.
      */
-    @Value("#{appProperties.getProperty('deezer.redirect_uri')}")
+    @Value("${deezer.redirect_uri}")
     private String redirectUri;
 
     /**
      * Deezer {@code secret}.
      */
-    @Value("#{appProperties.getProperty('deezer.secret')}")
+    @Value("${deezer.secret}")
     private String secret;
 
     @Override
