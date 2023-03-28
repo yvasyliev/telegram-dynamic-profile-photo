@@ -17,11 +17,10 @@ import it.tdlight.client.APIToken;
 import it.tdlight.client.TDLibSettings;
 import it.tdlight.common.TelegramClient;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -38,18 +37,15 @@ import java.util.Queue;
  * Spring context config.
  */
 @Configuration
+@PropertySource("file:app.properties")
 public class AppConfig {
-    @Autowired
-    @Qualifier("appProperties")
-    private Properties appProperties;
-
-    @Value("#{appProperties.getProperty('deezer.access_token')}")
+    @Value("${deezer.access_token}")
     private String deezerAccessToken;
 
-    @Value("#{appProperties.getProperty('telegram.api_id')}")
+    @Value("${telegram.api_id}")
     private int telegramAppId;
 
-    @Value("#{appProperties.getProperty('telegram.api_hash')}")
+    @Value("${telegram.api_hash}")
     private String telegramApiHash;
 
     @Bean(initMethod = "load", destroyMethod = "store")
