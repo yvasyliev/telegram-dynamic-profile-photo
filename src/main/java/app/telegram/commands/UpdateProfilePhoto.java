@@ -72,13 +72,22 @@ public class UpdateProfilePhoto implements Command {
     @Autowired
     private File photo;
 
+    @Value("https://e-cdn-images.dzcdn.net/images/cover/%s/1000x1000-000000-80-0-0.jpg")
+    private String coverUrlTemplate;
+
     @Override
     public void execute() throws Exception {
         var lastTrack = deezerApi.user().getMyHistory().limit(1).execute().getData().get(0);
         if (!lastTrack.getId().equals(lastTrackId)) {
             trackToPrint.setTrack(lastTrack);
 
-            var cover = ImageIO.read(new URL(lastTrack.getAlbum().getCoverXl()));
+            var album = lastTrack.getAlbum();
+            var coverUrl = album.getCoverXl();
+            if (coverUrl == null) {
+                coverUrl = coverUrlTemplate.formatted(album.getMd5Image());
+            }
+
+            var cover = ImageIO.read(new URL(coverUrl));
             imageProcessorQueue.forEach(imageProcessor -> imageProcessor.process(cover));
 
             ImageIO.write(cover, "png", photo);
