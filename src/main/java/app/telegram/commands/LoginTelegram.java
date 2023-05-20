@@ -1,8 +1,8 @@
 package app.telegram.commands;
 
 import app.telegram.clients.SyncTelegramClient;
-import it.tdlight.common.utils.ScannerUtils;
 import it.tdlight.jni.TdApi;
+import it.tdlight.util.ScannerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package app.telegram.clients;
 
+import it.tdlight.TelegramClient;
 import it.tdlight.client.TDLibSettings;
-import it.tdlight.common.TelegramClient;
 import it.tdlight.jni.TdApi;
 import org.springframework.beans.factory.annotation.Autowired;
 
