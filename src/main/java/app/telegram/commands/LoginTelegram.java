@@ -23,7 +23,7 @@ public class LoginTelegram implements Command {
     private SyncTelegramClient telegramClient;
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         var authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
         if (authorizationState instanceof TdApi.AuthorizationStateReady) {
             throw new IllegalStateException("The user is already logged in!");
@@ -34,6 +34,12 @@ public class LoginTelegram implements Command {
 
         var code = ScannerUtils.askParameter(phoneNumber, "Please enter code");
         telegramClient.send(new TdApi.CheckAuthenticationCode(code));
+
+        authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
+        if (authorizationState instanceof TdApi.AuthorizationStateWaitPassword) {
+            var password = ScannerUtils.askParameter(phoneNumber, "Please enter password");
+            telegramClient.send(new TdApi.CheckAuthenticationPassword(password));
+        }
 
         LOGGER.info("Logged in into Telegram.");
     }
