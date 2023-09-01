@@ -56,7 +56,7 @@ Also, [Deezer API Java Library](https://github.com/yvasyliev/deezer-api) is used
    ```
 6. Update profile photo.
    ```shell
-   java -jar telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar telegram.change_photo
+   java -jar telegram-dynamic-profile-photo-${version}-jar-with-dependencies.jar telegram.update_photo
    ```
 7. Logout from Telegram. `(Optional)`
    ```shell
