@@ -13,9 +13,12 @@ import app.telegram.services.ImageProcessor;
 import app.telegram.services.MakeDarker;
 import app.telegram.services.PrintText;
 import app.telegram.suppliers.TrackToPrint;
+import it.tdlight.ClientFactory;
+import it.tdlight.Init;
+import it.tdlight.TelegramClient;
 import it.tdlight.client.APIToken;
 import it.tdlight.client.TDLibSettings;
-import it.tdlight.common.TelegramClient;
+import it.tdlight.util.UnsupportedNativeLibraryException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -164,5 +167,11 @@ public class AppConfig {
     @Bean
     public File photo() {
         return new File("photo.png");
+    }
+
+    @Bean(destroyMethod = "close")
+    public ClientFactory clientFactory() throws UnsupportedNativeLibraryException {
+        Init.init();
+        return ClientFactory.create();
     }
 }

@@ -2,7 +2,7 @@ package app.telegram.commands;
 
 import api.deezer.DeezerApi;
 import api.deezer.objects.Permission;
-import it.tdlight.common.utils.ScannerUtils;
+import it.tdlight.util.ScannerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
