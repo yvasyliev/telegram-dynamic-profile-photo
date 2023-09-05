@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get latest tag
         id: get_latest_tag
         uses: actions-ecosystem/action-get-latest-tag@v1
@@ -48,7 +48,7 @@ jobs:
     needs: [check-input, check-tag]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Create Tag
         uses: rickstaa/action-create-tag@v1
         with:
@@ -64,7 +64,7 @@ jobs:
         run: |
           echo "JAR_PATH=target/${{ env.JAR_NAME }}" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
@@ -102,7 +102,7 @@ jobs:
         run: |
           echo "JAR_PATH=target/${{ env.JAR_NAME }}" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
