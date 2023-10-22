@@ -24,8 +24,7 @@ public class LoginTelegram implements Command {
 
     @Override
     public void execute() {
-        var authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
-        if (authorizationState instanceof TdApi.AuthorizationStateReady) {
+        if (telegramClient.send(new TdApi.GetAuthorizationState()) instanceof TdApi.AuthorizationStateReady) {
             throw new IllegalStateException("The user is already logged in!");
         }
 
@@ -35,8 +34,7 @@ public class LoginTelegram implements Command {
         var code = ScannerUtils.askParameter(phoneNumber, "Please enter code");
         telegramClient.send(new TdApi.CheckAuthenticationCode(code));
 
-        authorizationState = telegramClient.send(new TdApi.GetAuthorizationState());
-        if (authorizationState instanceof TdApi.AuthorizationStateWaitPassword) {
+        if (telegramClient.send(new TdApi.GetAuthorizationState()) instanceof TdApi.AuthorizationStateWaitPassword) {
             var password = ScannerUtils.askParameter(phoneNumber, "Please enter password");
             telegramClient.send(new TdApi.CheckAuthenticationPassword(password));
         }
