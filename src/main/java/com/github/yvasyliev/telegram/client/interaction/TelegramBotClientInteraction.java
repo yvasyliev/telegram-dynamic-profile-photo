@@ -13,13 +13,13 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class TelegramBotClientInteraction implements ClientInteraction {
     @Autowired
-    private ThrowingConsumer<ParameterInfoNotifyLink> sendLoginLink;
+    private ThrowingConsumer<ParameterInfoNotifyLink> qrCodeSender;
 
     @Override
     public CompletableFuture<String> onParameterRequest(InputParameter inputParameter, ParameterInfo parameterInfo) {
         try {
             if (parameterInfo instanceof ParameterInfoNotifyLink notifyLink) {
-                sendLoginLink.acceptWithException(notifyLink);
+                qrCodeSender.acceptWithException(notifyLink);
             }
             return CompletableFuture.completedFuture(null);
         } catch (Exception e) {
