@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.Queue;
 
@@ -88,7 +89,7 @@ public class UpdateProfilePhoto implements Command {
 
             deleteCurrentPhoto();
 
-            setProfilePhoto();
+            //setProfilePhoto();
 
             appProperties.setProperty("deezer.last_track", lastTrack.getId().toString());
             LOGGER.info("Updated Telegram profile photo.");
@@ -127,6 +128,7 @@ public class UpdateProfilePhoto implements Command {
     private void deleteCurrentPhoto() {
         var me = telegramClient.send(new TdApi.GetMe());
         var photos = telegramClient.send(new TdApi.GetUserProfilePhotos(me.id, 0, 1)).photos;
+        LOGGER.debug("photos={}", Arrays.toString(photos));
         if (photos != null && photos.length > 0) {
             telegramClient.send(new TdApi.DeleteProfilePhoto(photos[0].id));
         }

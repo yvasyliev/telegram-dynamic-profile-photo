@@ -27,7 +27,8 @@
             <AppenderRef ref="stdout"/>
             <AppenderRef ref="roll-by-time-and-size"/>
         </Root>
-        <Logger name="org.springframework" level="off"/>
-        <Logger name="it.tdlight" level="error"/>
+        <Logger name="org.springframework" level="error"/>
+        <Logger name="org.apache.http" level="off"/>
+<!--        <Logger name="it.tdlight" level="error"/>-->
     </Loggers>
 </Configuration>
