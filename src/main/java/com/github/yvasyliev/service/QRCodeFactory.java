@@ -1,6 +1,6 @@
 package com.github.yvasyliev.service;
 
-import com.github.yvasyliev.model.QRCodeDTO;
+import com.github.yvasyliev.model.QRCode;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Service
-public class QRCodeFactory implements ThrowingFunction<String, QRCodeDTO> {
+public class QRCodeFactory implements ThrowingFunction<String, QRCode> {
     @Autowired
     private Writer qrCodeWriter;
 
@@ -35,11 +35,11 @@ public class QRCodeFactory implements ThrowingFunction<String, QRCodeDTO> {
 
     @Override
     @NonNull
-    public QRCodeDTO applyWithException(@NonNull String url) throws WriterException, IOException {
+    public QRCode applyWithException(@NonNull String url) throws WriterException, IOException {
         var bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, width, height);
         try (var outputStream = new ByteArrayOutputStream()) {
             MatrixToImageWriter.writeToStream(bitMatrix, format, outputStream);
-            return new QRCodeDTO(
+            return new QRCode(
                     new ByteArrayInputStream(outputStream.toByteArray()),
                     filenameTemplate.formatted(UUID.randomUUID(), format)
             );

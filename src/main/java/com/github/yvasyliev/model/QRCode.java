@@ -2,5 +2,5 @@ package com.github.yvasyliev.model;
 
 import java.io.InputStream;
 
-public record QRCodeDTO(InputStream inputStream, String filename) {
+public record QRCode(InputStream inputStream, String filename) {
 }

@@ -18,6 +18,10 @@ public class TelegramBotClientInteraction implements ClientInteraction {
     @Override
     public CompletableFuture<String> onParameterRequest(InputParameter inputParameter, ParameterInfo parameterInfo) {
         try {
+            switch (inputParameter) {
+                case NOTIFY_LINK -> qrCodeSender.acceptWithException((ParameterInfoNotifyLink) parameterInfo);
+                case ASK_PASSWORD -> {}
+            }
             if (parameterInfo instanceof ParameterInfoNotifyLink notifyLink) {
                 qrCodeSender.acceptWithException(notifyLink);
             }
