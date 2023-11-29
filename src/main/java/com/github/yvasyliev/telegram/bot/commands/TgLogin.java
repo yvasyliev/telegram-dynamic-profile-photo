@@ -1,14 +1,17 @@
 package com.github.yvasyliev.telegram.bot.commands;
 
-import com.github.yvasyliev.telegram.client.interaction.QRCodeSender;
+import com.github.yvasyliev.model.QRCodeRequested;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.function.Consumer;
 
 @Service("/tglogin")
 public class TgLogin extends SingleChatCommand {
@@ -21,7 +24,10 @@ public class TgLogin extends SingleChatCommand {
     private String reply;
 
     @Autowired
-    private QRCodeSender qrCodeSender;
+    private Consumer<Long> chatIdSetter;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     public void execute(Message message) throws Exception {
@@ -37,9 +43,9 @@ public class TgLogin extends SingleChatCommand {
                 .chatId(chatId)
                 .action(ActionType.UPLOADPHOTO.toString())
                 .build();
-        managerBot.execute(sendMessage);
-        managerBot.execute(sendChatAction);
-        managerBot.setChatId(chatId);
-        qrCodeSender.sendQRCode();
+        sender.execute(sendMessage);
+        sender.execute(sendChatAction);
+        chatIdSetter.accept(chatId);
+        eventPublisher.publishEvent(new QRCodeRequested());
     }
 }

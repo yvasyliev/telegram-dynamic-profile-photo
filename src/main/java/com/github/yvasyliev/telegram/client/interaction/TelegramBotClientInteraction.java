@@ -6,28 +6,22 @@ import it.tdlight.client.ParameterInfo;
 import it.tdlight.client.ParameterInfoNotifyLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.function.ThrowingConsumer;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 @Component
 public class TelegramBotClientInteraction implements ClientInteraction {
     @Autowired
-    private ThrowingConsumer<ParameterInfoNotifyLink> qrCodeSender;
+    private Consumer<ParameterInfoNotifyLink> qrCodeSender;
 
     @Override
     public CompletableFuture<String> onParameterRequest(InputParameter inputParameter, ParameterInfo parameterInfo) {
-        try {
-            switch (inputParameter) {
-                case NOTIFY_LINK -> qrCodeSender.acceptWithException((ParameterInfoNotifyLink) parameterInfo);
-                case ASK_PASSWORD -> {}
+        switch (inputParameter) {
+            case NOTIFY_LINK -> qrCodeSender.accept((ParameterInfoNotifyLink) parameterInfo);
+            case ASK_PASSWORD -> {
             }
-            if (parameterInfo instanceof ParameterInfoNotifyLink notifyLink) {
-                qrCodeSender.acceptWithException(notifyLink);
-            }
-            return CompletableFuture.completedFuture(null);
-        } catch (Exception e) {
-            return CompletableFuture.failedFuture(e);
         }
+        return CompletableFuture.completedFuture(null);
     }
 }

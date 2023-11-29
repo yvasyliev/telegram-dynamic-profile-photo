@@ -14,6 +14,6 @@ public class UnknownCommand extends Command {
 
     @Override
     public void acceptWithException(@NonNull Message message) throws TelegramApiException {
-        managerBot.execute(new SendMessage(message.getChatId().toString(), reply));
+        sender.execute(new SendMessage(message.getChatId().toString(), reply));
     }
 }

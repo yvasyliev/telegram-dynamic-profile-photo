@@ -1,5 +1,6 @@
 package com.github.yvasyliev;
 
+import com.github.yvasyliev.telegram.bot.TgPhotoManagerBot;
 import com.google.zxing.Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import it.tdlight.Init;
@@ -8,6 +9,7 @@ import it.tdlight.Slf4JLogMessageHandler;
 import it.tdlight.client.APIToken;
 import it.tdlight.client.AuthenticationSupplier;
 import it.tdlight.client.ClientInteraction;
+import it.tdlight.client.GenericUpdateHandler;
 import it.tdlight.client.SimpleAuthenticationSupplier;
 import it.tdlight.client.SimpleTelegramClient;
 import it.tdlight.client.SimpleTelegramClientBuilder;
@@ -26,6 +28,8 @@ import org.telegram.telegrambots.starter.TelegramBotStarterConfiguration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Program main class.
@@ -86,25 +90,25 @@ public class Main {
     public SimpleTelegramClient simpleTelegramClient(
             SimpleTelegramClientBuilder telegramClientBuilder,
             ClientInteraction clientInteraction,
+            GenericUpdateHandler<TdApi.UpdateAuthorizationState> authorizationStateUpdateHandler,
             SimpleAuthenticationSupplier<?> authenticationSupplier) {
         telegramClientBuilder.setClientInteraction(clientInteraction);
-        telegramClientBuilder.addUpdateHandler(TdApi.UpdateAuthorizationState.class, update -> {
-            var authorizationState = update.authorizationState;
-            if (authorizationState instanceof TdApi.AuthorizationStateReady) {
-                System.out.println("Logged in");
-            } else if (authorizationState instanceof TdApi.AuthorizationStateClosing) {
-                System.out.println("Closing...");
-            } else if (authorizationState instanceof TdApi.AuthorizationStateClosed) {
-                System.out.println("Closed");
-            } else if (authorizationState instanceof TdApi.AuthorizationStateLoggingOut) {
-                System.out.println("Logging out...");
-            }
-        });
+        telegramClientBuilder.addUpdateHandler(TdApi.UpdateAuthorizationState.class, authorizationStateUpdateHandler);
         return telegramClientBuilder.build(authenticationSupplier);
     }
 
     @Bean
     public Writer qrCodeWriter() {
         return new QRCodeWriter();
+    }
+
+    @Bean
+    public Supplier<Long> chatIdGetter(TgPhotoManagerBot bot) {
+        return bot::getChatId;
+    }
+
+    @Bean
+    public Consumer<Long> chatIdSetter(TgPhotoManagerBot bot) {
+        return bot::setChatId;
     }
 }

@@ -63,14 +63,6 @@ public class TgPhotoManagerBot extends TelegramLongPollingBot {
         }
     }
 
-    public boolean hasChatId() {
-        return chatId != null;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
     @Override
     public String getBotUsername() {
         return botUsername;
@@ -78,5 +70,9 @@ public class TgPhotoManagerBot extends TelegramLongPollingBot {
 
     public Long getChatId() {
         return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 }

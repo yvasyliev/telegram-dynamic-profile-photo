@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 @Service("/cancel")
 public class Cancel extends Command {
@@ -25,12 +26,15 @@ public class Cancel extends Command {
     @Value("👌 Ok.")
     private String reply;
 
+    @Autowired
+    private Consumer<Long> chatIdSetter;
+
     @Override
     public void acceptWithException(@NonNull Message message) throws ExecutionException, InterruptedException, TelegramApiException {
         var authorizationState = tdLightClient.getAuthorizationState().get();
         if (initialStates.contains(authorizationState.getClass())) {
-            managerBot.setChatId(null);
+            chatIdSetter.accept(null);
         }
-        managerBot.execute(new SendMessage(message.getChatId().toString(), reply));
+        sender.execute(new SendMessage(message.getChatId().toString(), reply));
     }
 }

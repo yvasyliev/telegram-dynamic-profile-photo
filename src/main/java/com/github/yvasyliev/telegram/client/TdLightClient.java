@@ -13,6 +13,7 @@ public class TdLightClient {
     @Autowired
     private SimpleTelegramClient client;
 
+    // TODO: 11/29/2023 remove @PreDestroy
     @PreDestroy
     public void logout() {
         client.execute(new TdApi.LogOut());

@@ -26,7 +26,7 @@ public class Start extends Command {
 
     @Override
     public void acceptWithException(@NonNull Message message) throws TelegramApiException {
-        managerBot.execute(new SendMessage(
+        sender.execute(new SendMessage(
                 message.getChatId().toString(),
                 reply.formatted(me.getFirstName())
         ));
