@@ -3,13 +3,13 @@ package com.github.yvasyliev.telegram.bot.commands;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-@Service("/start")
+@Component("/start")
 public class Start extends Command {
     @Autowired
     private User me;
@@ -26,7 +26,7 @@ public class Start extends Command {
 
     @Override
     public void acceptWithException(@NonNull Message message) throws TelegramApiException {
-        sender.execute(new SendMessage(
+        bot.execute(new SendMessage(
                 message.getChatId().toString(),
                 reply.formatted(me.getFirstName())
         ));

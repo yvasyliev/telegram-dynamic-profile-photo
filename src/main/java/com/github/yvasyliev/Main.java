@@ -1,19 +1,12 @@
 package com.github.yvasyliev;
 
-import com.github.yvasyliev.telegram.bot.TgPhotoManagerBot;
 import com.google.zxing.Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
+import it.tdlight.ClientFactory;
 import it.tdlight.Init;
 import it.tdlight.Log;
 import it.tdlight.Slf4JLogMessageHandler;
 import it.tdlight.client.APIToken;
-import it.tdlight.client.AuthenticationSupplier;
-import it.tdlight.client.ClientInteraction;
-import it.tdlight.client.GenericUpdateHandler;
-import it.tdlight.client.SimpleAuthenticationSupplier;
-import it.tdlight.client.SimpleTelegramClient;
-import it.tdlight.client.SimpleTelegramClientBuilder;
-import it.tdlight.client.SimpleTelegramClientFactory;
 import it.tdlight.client.TDLibSettings;
 import it.tdlight.jni.TdApi;
 import it.tdlight.util.UnsupportedNativeLibraryException;
@@ -27,9 +20,8 @@ import org.springframework.context.annotation.Import;
 import org.telegram.telegrambots.starter.TelegramBotStarterConfiguration;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Program main class.
@@ -52,11 +44,37 @@ public class Main {
     }
 
     @Bean
-    public SimpleTelegramClientFactory simpleTelegramClientFactory() throws UnsupportedNativeLibraryException {
+    public ClientFactory clientFactory() throws UnsupportedNativeLibraryException {
         Init.init();
         Log.setLogMessageHandler(1, new Slf4JLogMessageHandler());
-        return new SimpleTelegramClientFactory();
+        return ClientFactory.create();
     }
+
+    @Bean
+    public TdApi.SetTdlibParameters setTdlibParameters(TDLibSettings tdLibSettings) {
+        var setTdlibParameters = new TdApi.SetTdlibParameters();
+        setTdlibParameters.apiId = tdLibSettings.getApiToken().getApiID();
+        setTdlibParameters.apiHash = tdLibSettings.getApiToken().getApiHash();
+        setTdlibParameters.databaseDirectory = tdLibSettings.getDatabaseDirectoryPath().toString();
+        setTdlibParameters.filesDirectory = tdLibSettings.getDownloadedFilesDirectoryPath().toString();
+        setTdlibParameters.applicationVersion = tdLibSettings.getApplicationVersion();
+        setTdlibParameters.deviceModel = tdLibSettings.getDeviceModel();
+        setTdlibParameters.systemVersion = tdLibSettings.getSystemVersion();
+        setTdlibParameters.systemLanguageCode = tdLibSettings.getSystemLanguageCode();
+        setTdlibParameters.useTestDc = tdLibSettings.isUsingTestDatacenter();
+        setTdlibParameters.useChatInfoDatabase = tdLibSettings.isChatInfoDatabaseEnabled();
+        setTdlibParameters.useFileDatabase = tdLibSettings.isFileDatabaseEnabled();
+        setTdlibParameters.ignoreFileNames = tdLibSettings.isIgnoreFileNames();
+        setTdlibParameters.useMessageDatabase = tdLibSettings.isMessageDatabaseEnabled();
+        setTdlibParameters.enableStorageOptimizer = tdLibSettings.isStorageOptimizerEnabled();
+        return setTdlibParameters;
+    }
+
+//    @Bean
+//    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+//    public TelegramClient telegramClient(ClientFactory clientFactory) {
+//        return clientFactory.createClient();
+//    }
 
     @Bean
     public APIToken apiToken(@Value("${telegram.api.id}") int apiId, @Value("${telegram.api.hash}") String apiHash) {
@@ -64,37 +82,13 @@ public class Main {
     }
 
     @Bean
-    public TDLibSettings tdLibSettings(APIToken apiToken, Path sessionPath) {
+    public TDLibSettings tdLibSettings(
+            APIToken apiToken,
+            @Value("#{T(java.nio.file.Paths).get('${telegram.session.path:tdlib-session}')}") Path sessionPath) {
         var settings = TDLibSettings.create(apiToken);
         settings.setDatabaseDirectoryPath(sessionPath.resolve("data"));
         settings.setDownloadedFilesDirectoryPath(sessionPath.resolve("downloads"));
         return settings;
-    }
-
-    @Bean
-    public Path sessionPath() {
-        return Paths.get("tdlib-session");
-    }
-
-    @Bean
-    public SimpleTelegramClientBuilder simpleTelegramClientBuilder(SimpleTelegramClientFactory clientFactory, TDLibSettings settings) {
-        return clientFactory.builder(settings);
-    }
-
-    @Bean
-    public SimpleAuthenticationSupplier<?> simpleAuthenticationSupplier() {
-        return AuthenticationSupplier.qrCode();
-    }
-
-    @Bean(destroyMethod = "sendClose")
-    public SimpleTelegramClient simpleTelegramClient(
-            SimpleTelegramClientBuilder telegramClientBuilder,
-            ClientInteraction clientInteraction,
-            GenericUpdateHandler<TdApi.UpdateAuthorizationState> authorizationStateUpdateHandler,
-            SimpleAuthenticationSupplier<?> authenticationSupplier) {
-        telegramClientBuilder.setClientInteraction(clientInteraction);
-        telegramClientBuilder.addUpdateHandler(TdApi.UpdateAuthorizationState.class, authorizationStateUpdateHandler);
-        return telegramClientBuilder.build(authenticationSupplier);
     }
 
     @Bean
@@ -103,12 +97,12 @@ public class Main {
     }
 
     @Bean
-    public Supplier<Long> chatIdGetter(TgPhotoManagerBot bot) {
-        return bot::getChatId;
-    }
-
-    @Bean
-    public Consumer<Long> chatIdSetter(TgPhotoManagerBot bot) {
-        return bot::setChatId;
+    public Map<Long, String> pendingCommands(@Value("16") int maxSize) {
+        return new LinkedHashMap<>() {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Long, String> eldest) {
+                return size() > maxSize;
+            }
+        };
     }
 }

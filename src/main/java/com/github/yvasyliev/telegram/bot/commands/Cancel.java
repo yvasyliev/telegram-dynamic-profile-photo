@@ -5,36 +5,33 @@ import it.tdlight.jni.TdApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
 
-@Service("/cancel")
+@Component("/cancel")
 public class Cancel extends Command {
     @Autowired
-    private TdLightClient tdLightClient;
-
-    @Value("""
-            #{Class.forName("it.tdlight.jni.TdApi$AuthorizationStateWaitOtherDeviceConfirmation")}""")
-    private Set<Class<? extends TdApi.AuthorizationState>> initialStates;
-
-    @Value("👌 Ok.")
-    private String reply;
+    private TdLightClient client;
 
     @Autowired
-    private Consumer<Long> chatIdSetter;
+    private Map<Long, String> pendingCommands;
+
+    @Value("👌 OK.")
+    private String reply;
 
     @Override
     public void acceptWithException(@NonNull Message message) throws ExecutionException, InterruptedException, TelegramApiException {
-        var authorizationState = tdLightClient.getAuthorizationState().get();
-        if (initialStates.contains(authorizationState.getClass())) {
-            chatIdSetter.accept(null);
+        var chatId = message.getChatId();
+        if (chatId.equals(bot.getChatId()) && client.getAuthorizationState().get() instanceof TdApi.AuthorizationStateWaitPassword) {
+            client.logOut();
+            bot.unsetChatId();
         }
-        sender.execute(new SendMessage(message.getChatId().toString(), reply));
+        pendingCommands.remove(chatId);
+        bot.execute(new SendMessage(chatId.toString(), reply));
     }
 }
