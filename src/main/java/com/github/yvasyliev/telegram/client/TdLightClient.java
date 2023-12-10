@@ -30,7 +30,6 @@ public class TdLightClient {
     private TelegramClient client;
 
     public void onUpdate(TdApi.Object object) {
-        LOGGER.debug("Received update: {}", object);
         if (object instanceof TdApi.UpdateAuthorizationState updateAuthorizationState) {
             if (updateAuthorizationState.authorizationState instanceof TdApi.AuthorizationStateWaitTdlibParameters) {
                 send(setTdlibParameters);

@@ -13,10 +13,12 @@ import it.tdlight.util.UnsupportedNativeLibraryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 import org.telegram.telegrambots.starter.TelegramBotStarterConfiguration;
 
 import java.nio.file.Path;
@@ -44,6 +46,7 @@ public class Main {
     }
 
     @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     public ClientFactory clientFactory() throws UnsupportedNativeLibraryException {
         Init.init();
         Log.setLogMessageHandler(1, new Slf4JLogMessageHandler());

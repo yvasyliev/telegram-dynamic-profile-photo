@@ -13,13 +13,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class TelegramClientFactoryBean implements FactoryBean<TelegramClient> {
     @Autowired
-    private ClientFactory clientFactory;
-
-    @Autowired
     private ApplicationContext context;
+
+    private ClientFactory clientFactory;
 
     @Override
     public TelegramClient getObject() {
+//        if (clientFactory != null) {
+//            clientFactory.close();
+//        }
+        clientFactory = context.getBean(ClientFactory.class);
         var client = clientFactory.createClient();
         client.initialize(
                 (ResultHandler<TdApi.Update>) object -> context.getBean(TdLightClient.class).onUpdate(object),
